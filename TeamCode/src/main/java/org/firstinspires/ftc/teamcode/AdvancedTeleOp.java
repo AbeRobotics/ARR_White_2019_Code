@@ -10,6 +10,12 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name="Test Op Mode", group="Linear Opmode")
 //@Disabled
 public class TestOpMode extends LinearOpMode {
+	
+	// Constants
+	// Use speed multiplier to set top speed, 1 means no change
+	private double SPEED_MULTIPLIER = 1.0;
+	// Sets how quickly the power to the wheels changes as a percent of goal speed (max 1)
+	private double ACCELERATION_MULTIPIER = 1.0;
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -45,8 +51,8 @@ public class TestOpMode extends LinearOpMode {
             
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
-            leftPower  = gamepad1.left_stick_y ;
-            rightPower = gamepad1.right_stick_y ;
+            leftPower  = -gamepad1.left_stick_y * SPEED_MULTIPLIER;
+            rightPower = -gamepad1.right_stick_y * SPEED_MULTIPLIER;
 
             // Send calculated power to wheels
             leftDrive.setPower(leftPower);
