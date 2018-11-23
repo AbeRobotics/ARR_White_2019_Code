@@ -13,8 +13,8 @@ public class TestOpMode extends LinearOpMode {
 	
 	// Constants
 	// Use speed multiplier to set top speed, 1 means no change
-	private double SPEED_MULTIPLIER = 1.0;
-	// Sets how quickly the power to the wheels changes as a percent of goal speed (max 1)
+	private double SPEED_MULTIPLIER = 0.75;
+	// Sets how quickly the power to the wheels changes as a percent of the difference goal speed and current speed (max 1)
 	private double ACCELERATION_MULTIPIER = 1.0;
 
     // Declare OpMode members.
@@ -46,13 +46,20 @@ public class TestOpMode extends LinearOpMode {
         while (opModeIsActive()) {
 
             // Setup a variable for each drive wheel to save power level for telemetry
+            double goalLeftPower;
+            double goalRightPower;
+            
             double leftPower;
             double rightPower;
-            
+
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
-            leftPower  = -gamepad1.left_stick_y * SPEED_MULTIPLIER;
-            rightPower = -gamepad1.right_stick_y * SPEED_MULTIPLIER;
+            goalLeftPower  = -gamepad1.left_stick_y * SPEED_MULTIPLIER;
+            goalRightPower = -gamepad1.right_stick_y * SPEED_MULTIPLIER;
+            
+            //Set the wheel power to the difference between the desired and actual power times the acceleration multiplier.
+            leftPower = leftPower + ((goalLeftPower - leftPower) * ACCELERATION_MULTIPLIER);
+            rightPower = rightPower + ((goalRightPower - rightPower) * ACCELERATION_MULTIPLIER);
 
             // Send calculated power to wheels
             leftDrive.setPower(leftPower);
@@ -60,7 +67,8 @@ public class TestOpMode extends LinearOpMode {
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            telemetry.addData("Motors", "left (%.2f), right (%.2f), goal left (%.2f), goal right (%.2f)",
+            		leftPower, rightPower, goalLeftPower, goalRightPower);
             telemetry.update();
         }
     }
