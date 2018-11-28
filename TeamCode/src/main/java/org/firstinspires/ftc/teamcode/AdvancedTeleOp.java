@@ -15,7 +15,7 @@ public class TestOpMode extends LinearOpMode {
 	// Use speed multiplier to set top speed, 1 means no change
 	private double SPEED_MULTIPLIER = 0.75;
 	// Sets how quickly the power to the wheels changes as a percent of the difference goal speed and current speed (max 1)
-	private double ACCELERATION_MULTIPIER = 1.0;
+	private double ACCELERATION_MULTIPIER = (1/60);
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -62,8 +62,8 @@ public class TestOpMode extends LinearOpMode {
             rightPower = rightPower + ((goalRightPower - rightPower) * ACCELERATION_MULTIPLIER);
 
             // Send calculated power to wheels
-            leftDrive.setPower(leftPower);
-            rightDrive.setPower(rightPower);
+            leftDrive.setPower(rightPower);
+            rightDrive.setPower(leftPower);
 
             // Show the elapsed game time, goal wheel power, and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
