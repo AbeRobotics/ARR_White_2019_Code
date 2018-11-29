@@ -2,20 +2,18 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="Test Op Mode", group="Linear Opmode")
+@TeleOp(name="Advanced Tele Op", group="Linear Opmode")
 //@Disabled
-public class TestOpMode extends LinearOpMode {
+public class AdvancedTeleOp extends LinearOpMode {
 	
 	// Constants
 	// Use speed multiplier to set top speed, 1 means no change
 	private double SPEED_MULTIPLIER = 0.75;
 	// Sets how quickly the power to the wheels changes as a percent of the difference goal speed and current speed (max 1)
-	private double ACCELERATION_MULTIPIER = 1.0;
+	private double ACCELERATION_MULTIPLIER = (0.5);
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -42,6 +40,9 @@ public class TestOpMode extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
+        double leftPower = 0;
+        double rightPower = 0;
+
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
@@ -49,8 +50,7 @@ public class TestOpMode extends LinearOpMode {
             double goalLeftPower;
             double goalRightPower;
             
-            double leftPower;
-            double rightPower;
+
 
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
@@ -62,10 +62,10 @@ public class TestOpMode extends LinearOpMode {
             rightPower = rightPower + ((goalRightPower - rightPower) * ACCELERATION_MULTIPLIER);
 
             // Send calculated power to wheels
-            leftDrive.setPower(leftPower);
-            rightDrive.setPower(rightPower);
+            leftDrive.setPower(rightPower);
+            rightDrive.setPower(leftPower);
 
-            // Show the elapsed game time and wheel power.
+            // Show the elapsed game time, goal wheel power, and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f), goal left (%.2f), goal right (%.2f)",
             		leftPower, rightPower, goalLeftPower, goalRightPower);
