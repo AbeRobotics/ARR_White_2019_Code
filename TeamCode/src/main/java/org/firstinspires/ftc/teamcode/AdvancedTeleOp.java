@@ -62,8 +62,8 @@ public class AdvancedTeleOp extends LinearOpMode {
             rightPower = rightPower + ((goalRightPower - rightPower) * ACCELERATION_MULTIPLIER);
 
             // Send calculated power to wheels
-            leftDrive.setPower(leftPower);
-            rightDrive.setPower(rightPower);
+            leftDrive.setPower(rightPower);
+            rightDrive.setPower(leftPower);
 
             // Show the elapsed game time, goal wheel power, and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
