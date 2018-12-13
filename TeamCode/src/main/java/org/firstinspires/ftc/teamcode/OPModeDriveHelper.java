@@ -17,5 +17,11 @@ public class OPModeDriveHelper {
     	this.hardwareMap = hardwareMap;
         opModeConstants = OPModeConstants.getInstance();
     	
+        leftWheel = hardwareMap.dcMotor.get("left_wheel");
+        rightWheel = hardwareMap.dcMotor.get("right_wheel");
     }
+    
+    private OPModeDriveHelper() {}
+    
+    public boolean MoveForward(Double inches)
 }
