@@ -20,7 +20,7 @@ public class OPModeDriveHelper {
         return instance;
     }
     
-    public void Init(Telemetry telemetry, HardwareMap hardwareMap) {
+    public void init(Telemetry telemetry, HardwareMap hardwareMap) {
     	this.telemetry = telemetry;
     	this.hardwareMap = hardwareMap;
         opModeConstants = OPModeConstants.getInstance();
@@ -31,14 +31,14 @@ public class OPModeDriveHelper {
     
     private OPModeDriveHelper(){}
     
-    public boolean MoveForward(Double inches) {
-    	return MoveForward(inches, opModeConstants.getAutoSpeed());
+    public boolean moveForward(Double inches) {
+    	return moveForward(inches, opModeConstants.getAutoSpeed());
     }
     
     // TODO It seems redundant to copy MoveForward for MoveBackward. Will probably just create function that
     // multiplies the input by -1 and calls MoveForward or create a single move function for MoveForward and MoveBackward.
-    public boolean MoveForward(Double inches, OPModeConstants.AutonomousSpeed speed) {
-    	ResetDriveEncoders();
+    public boolean moveForward(Double inches, OPModeConstants.AutonomousSpeed speed) {
+    	resetDriveEncoders();
     	//SetForwardSteering();		TODO What is the point of this method? What advantage over SetAllStop()?
     	double totalTicks = opModeConstants.ticksPerInch * inches;
     	
@@ -52,16 +52,23 @@ public class OPModeDriveHelper {
             telemetry.addData("Left Current Position -",leftWheel.getCurrentPosition());
             telemetry.addData("Right Current Position -",rightWheel.getCurrentPosition());
             telemetry.update();
-            sleep(10); // TODO What import do I use for this again?
+            sleep(10);
         }
-        SetAllStop();
-        ResetDriveEncoders();
+        setAllStop();
+        resetDriveEncoders();
         return true;
     }
+    
+    public boolean gyroTurn(OPModeConstants.AutonomousSpeed speed, double angle) {
+    	leftWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    	rightWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    	
+    	
+    }
 
-	private double GetPower(OPModeConstants.AutonomousSpeed speed) {
-		switch(speed){
-			case SLOW:
+	private double getPower(OPModeConstants.AutonomousSpeed speed) {
+		switch(speed) {
+			case LOW:
 				return 0.5;
 				break;
 			
@@ -75,15 +82,21 @@ public class OPModeDriveHelper {
 		}
 	}
 
-	private void ResetDriveEncoders() {
+	private void resetDriveEncoders() {
 		leftWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		rightWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 	}
 	
-    public void SetAllStop(){
+    public void setAllStop() {
         leftWheel.setPower(0);
         rightWheel.setPower(0);
     }
     
-    
+    public final void sleep(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
 }

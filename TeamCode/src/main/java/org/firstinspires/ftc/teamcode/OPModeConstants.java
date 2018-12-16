@@ -5,9 +5,9 @@ public class OPModeConstants {
 	// TODO Need to update with actual value. See GitHub issue #10
 	public final double ticksPerInch = 0d;
 
-	// Auto Speeds, SLOW = 0.5; MEDIUM = 0.75; FAST = 1.0
+	// Auto Speeds, LOW = 0.5; MEDIUM = 0.75; FAST = 1.0
 	public enum AutonomousSpeed{
-		SLOW,
+		LOW,
 		MEDIUM,
 		HIGH
 	}
