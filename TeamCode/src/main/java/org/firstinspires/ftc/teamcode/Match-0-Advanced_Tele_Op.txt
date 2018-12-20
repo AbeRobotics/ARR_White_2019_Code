@@ -1,0 +1,24 @@
+--------- beginning of main
+12-12 16:57:41.285  5282  7811 V Robocol : received command: CMD_SET_MATCH_NUMBER(50893) 0
+12-12 16:57:41.298  5282  7811 V Robocol : received command: CMD_INIT_OP_MODE(50894) Advanced Tele Op
+12-12 16:57:41.306  5282  7810 I RobotCore: ******************** START - OPMODE Advanced Tele Op ********************
+12-12 16:57:41.308  5282  8578 I RobotCore: Attempting to switch to op mode Advanced Tele Op
+12-12 16:57:41.391  5282  8578 W LynxPwmOutputController: LynxSetPWMEnableCommand not implemented by lynx hw; ignoring
+12-12 16:57:41.395  5282  8578 W LynxPwmOutputController: LynxSetPWMConfigurationCommand not implemented by lynx hw; ignoring
+12-12 16:57:41.400  5282  8578 W LynxPwmOutputController: LynxSetPWMEnableCommand not implemented by lynx hw; ignoring
+12-12 16:57:41.405  5282  8578 W LynxPwmOutputController: LynxSetPWMConfigurationCommand not implemented by lynx hw; ignoring
+12-12 16:57:41.409  5282  8578 W LynxPwmOutputController: LynxSetPWMEnableCommand not implemented by lynx hw; ignoring
+12-12 16:57:41.413  5282  8578 W LynxPwmOutputController: LynxSetPWMConfigurationCommand not implemented by lynx hw; ignoring
+12-12 16:57:41.417  5282  8578 W LynxPwmOutputController: LynxSetPWMEnableCommand not implemented by lynx hw; ignoring
+12-12 16:57:41.422  5282  8578 W LynxPwmOutputController: LynxSetPWMConfigurationCommand not implemented by lynx hw; ignoring
+12-12 16:57:41.488  5282  8739 V RobotCore: thread: 'LinearOpMode main' starting...
+12-12 16:57:41.509  5282  7910 V Robocol : sending CMD_NOTIFY_INIT_OP_MODE(43887), attempt: 0
+12-12 16:57:41.730  5282  7811 V Robocol : received command: CMD_RUN_OP_MODE(50906) Advanced Tele Op
+12-12 16:57:41.750  5282  7910 V Robocol : sending CMD_NOTIFY_RUN_OP_MODE(43894), attempt: 0
+12-12 16:58:01.366  5282  7811 V Robocol : received command: CMD_INIT_OP_MODE(51282) $Stop$Robot$
+12-12 16:58:01.373  5282  7810 I RobotCore: ******************** STOP - OPMODE /storage/emulated/0/FIRST/matchlogs/Match-0-Advanced_Tele_Op.txt ********************
+12-12 16:58:01.379  5282  8739 V RobotCore: thread: ...terminating 'LinearOpMode main'
+12-12 16:58:01.379  5282  8740 I RobotCore: saving match logcat to /storage/emulated/0/FIRST/matchlogs/Match-0-Advanced_Tele_Op.txt
+12-12 16:58:01.379  5282  8740 I RobotCore: logging command line: exec logcat -d -T '12-12 16:57:41.000' -f /storage/emulated/0/FIRST/matchlogs/Match-0-Advanced_Tele_Op.txt -n4 -v threadtime UsbRequestJNI:S UsbRequest:S art:W ThreadPool:W System:W ExtendedExtractor:W OMXClient:W MediaPlayer:W dalvikvm:W  *:V
+12-12 16:58:01.379  5282  8578 I RobotCore: Attempting to switch to op mode $Stop$Robot$
+12-12 16:58:01.429  5282  7910 V Robocol : sending CMD_NOTIFY_INIT_OP_MODE(44293), attempt: 0
