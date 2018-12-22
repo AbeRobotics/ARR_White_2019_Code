@@ -19,6 +19,11 @@ public class OPModeGyroHelper {
 			parameters.loggingEnabled = true;
             parameters.loggingTag = "Gyro";
             parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+            
+            //sensor type is ADA Fruit
+            // name it 'Gyro' on hardware config
+            imu = hardwareMap.get(BNO055IMU.class, "Gyro");
+            imu.initialize(parameters);
 		}
 	}
 }
