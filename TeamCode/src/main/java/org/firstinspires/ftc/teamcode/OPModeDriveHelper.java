@@ -48,8 +48,8 @@ public class OPModeDriveHelper {
         rightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftWheel.setTargetPosition((int)totalTicks);
         rightWheel.setTargetPosition((int)totalTicks);
-        leftWheel.setPower(GetPower(speed));
-        rightWheel.setPower(GetPower(speed));
+        leftWheel.setPower(getPower(speed));
+        rightWheel.setPower(getPower(speed));
         
         while(leftWheel.isBusy()) {
             telemetry.addData("Left Current Position -",leftWheel.getCurrentPosition());
@@ -76,8 +76,8 @@ public class OPModeDriveHelper {
     	
     	OPModeGyroHelper gyroHelper = new OPModeGyroHelper();
     	while(!onHeading(angle, gyroHelper)) {
-    		leftWheel.setPower(GetPower(speed));
-            rightWheel.setPower(GetPower(speed));
+    		leftWheel.setPower(getPower(speed));
+            rightWheel.setPower(getPower(speed));
     	}
     	
     	setAllStop();
@@ -101,11 +101,11 @@ public class OPModeDriveHelper {
 		case LOW:
 			return 0.5;
 			break;
-			
+
 		case MEDIUM:
 			return 0.75;
 			break;
-			
+
 		case HIGH:
 			return 1.0;
 			break;
