@@ -21,10 +21,10 @@ public class OPModeDriveHelper {
         return instance;
     }
     
-    public void init(Telemetry telemetry, HardwareMap hardwareMap) {
+    public void init(Telemetry telemetry, HardwareMap hardwareMap, OPModeConstants opModeConstants) {
     	this.telemetry = telemetry;
     	this.hardwareMap = hardwareMap;
-        opModeConstants = OPModeConstants.getInstance();
+        this.opModeConstants = opModeConstants;
     	
         leftWheel = hardwareMap.dcMotor.get("left_wheel");
         rightWheel = hardwareMap.dcMotor.get("right_wheel");
@@ -68,8 +68,8 @@ public class OPModeDriveHelper {
     	resetDriveEncoders();
     	
     	setTurnDirection(direction);
-    	while(angle > 180) {angle -= 360;}
-    	while(angle <= 180) {angle += 360;}
+    	while(angle > 360) {angle -= 360;}
+    	while(angle < 0) {angle += 360;}
     	
     	leftWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     	rightWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
