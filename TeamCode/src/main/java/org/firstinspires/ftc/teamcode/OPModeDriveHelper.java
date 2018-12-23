@@ -82,6 +82,7 @@ public class OPModeDriveHelper {
     	
     	setAllStop();
     	resetDriveEncoders();
+    	return true;
     }
     
     // Checks if robot is facing an angle
@@ -100,15 +101,12 @@ public class OPModeDriveHelper {
 		switch(speed) {
 		case LOW:
 			return 0.5;
-			break;
-
 		case MEDIUM:
 			return 0.75;
-			break;
-
 		case HIGH:
 			return 1.0;
-			break;
+		default:
+			return 0.0;
 		}
 	}
 	
