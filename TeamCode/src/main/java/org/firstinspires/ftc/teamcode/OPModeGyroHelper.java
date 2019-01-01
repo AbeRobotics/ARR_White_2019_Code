@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.util.ReadWriteFile;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
@@ -17,7 +18,7 @@ public class OPModeGyroHelper {
 	private Orientation angles;
 	
 	// returns robot angle
-	public double getGyroAngle(Telemetry telemetry, HardwareMap hardwareMap) {
+	public double getGyroAngle(Telemetry telemetry, HardwareMap hardwareMap, ElapsedTime elapsedTime) {
 		if(imu == null) {
 			BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 			parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -32,9 +33,17 @@ public class OPModeGyroHelper {
             imu = hardwareMap.get(BNO055IMU.class, "Gyro");
             imu.initialize(parameters);
 		}
-		angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+		telemetry.addData("Gyro Calibration: ", imu.isGyroCalibrated());
+		telemetry.addData("Accel Calibration: ", imu.isAccelerometerCalibrated());
+		telemetry.update();
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) { }
+		angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
         double currentAngle = angles.firstAngle;
+        telemetry.addData("Elapsed time: ", elapsedTime.toString());
         telemetry.addData("Gyro Angle", currentAngle);
+        telemetry.update();
         return currentAngle;
 	}
 }

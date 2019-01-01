@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -10,6 +13,7 @@ public class OPModeDriveHelper {
     private  OPModeConstants opModeConstants;
     private  Telemetry telemetry;
     private  HardwareMap hardwareMap;
+    private ElapsedTime elapsedTime;
     DcMotor leftWheel;
     DcMotor rightWheel;
     
@@ -21,10 +25,11 @@ public class OPModeDriveHelper {
         return instance;
     }
     
-    public void init(Telemetry telemetry, HardwareMap hardwareMap, OPModeConstants opModeConstants) {
+    public void init(Telemetry telemetry, HardwareMap hardwareMap, OPModeConstants opModeConstants, ElapsedTime elapsedTime) {
     	this.telemetry = telemetry;
     	this.hardwareMap = hardwareMap;
         this.opModeConstants = opModeConstants;
+        this.elapsedTime = elapsedTime;
     	
         leftWheel = hardwareMap.dcMotor.get("left_wheel");
         rightWheel = hardwareMap.dcMotor.get("right_wheel");
@@ -46,13 +51,14 @@ public class OPModeDriveHelper {
     	setDriveDirection(direction);
     	leftWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		leftWheel.setPower(getPower(speed));
+		rightWheel.setPower(getPower(speed));
         leftWheel.setTargetPosition((int)totalTicks);
         rightWheel.setTargetPosition((int)totalTicks);
-        leftWheel.setPower(getPower(speed));
-        rightWheel.setPower(getPower(speed));
         
-        while(leftWheel.isBusy()) {
+        while((leftWheel.isBusy() || rightWheel.isBusy()) && elapsedTime.milliseconds() < opModeConstants.getRuntimeLimitMilliseconds()) {
             telemetry.addData("Left Current Position -",leftWheel.getCurrentPosition());
+            telemetry.addData("Target positions: ", totalTicks);
             telemetry.addData("Right Current Position -",rightWheel.getCurrentPosition());
             telemetry.update();
             sleep(10);
@@ -75,7 +81,7 @@ public class OPModeDriveHelper {
     	rightWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     	
     	OPModeGyroHelper gyroHelper = new OPModeGyroHelper();
-    	while(!onHeading(angle, gyroHelper)) {
+    	while(!onHeading(angle, gyroHelper) && elapsedTime.milliseconds() < opModeConstants.getRuntimeLimitMilliseconds()) {
     		leftWheel.setPower(getPower(speed));
             rightWheel.setPower(getPower(speed));
     	}
@@ -89,7 +95,7 @@ public class OPModeDriveHelper {
     private boolean onHeading(double targetAngle, OPModeGyroHelper gyroHelper) {
     	boolean onTarget = false;
     	
-    	double DegreesOffTarget = Math.abs(targetAngle - gyroHelper.getGyroAngle(telemetry, hardwareMap));
+    	double DegreesOffTarget = Math.abs(targetAngle - gyroHelper.getGyroAngle(telemetry, hardwareMap, elapsedTime));
     	if(DegreesOffTarget < opModeConstants.gyroErrorThreshold) {
     		onTarget = true;
     	}
