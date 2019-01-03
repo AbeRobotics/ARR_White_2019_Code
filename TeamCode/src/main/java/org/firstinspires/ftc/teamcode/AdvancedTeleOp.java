@@ -35,6 +35,10 @@ public class AdvancedTeleOp extends LinearOpMode {
         // Reverse the motor that runs backwards when connected directly to the battery
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -54,21 +58,23 @@ public class AdvancedTeleOp extends LinearOpMode {
 
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
-            goalLeftPower  = -gamepad1.left_stick_y * SPEED_MULTIPLIER;
-            goalRightPower = -gamepad1.right_stick_y * SPEED_MULTIPLIER;
+            goalLeftPower  = gamepad1.left_stick_y * SPEED_MULTIPLIER;
+            goalRightPower = gamepad1.right_stick_y * SPEED_MULTIPLIER;
             
             //Set the wheel power to the difference between the desired and actual power times the acceleration multiplier.
             leftPower = leftPower + ((goalLeftPower - leftPower) * ACCELERATION_MULTIPLIER);
             rightPower = rightPower + ((goalRightPower - rightPower) * ACCELERATION_MULTIPLIER);
 
             // Send calculated power to wheels
-            leftDrive.setPower(rightPower);
-            rightDrive.setPower(leftPower);
+            leftDrive.setPower(leftPower);
+            rightDrive.setPower(rightPower);
 
             // Show the elapsed game time, goal wheel power, and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f), goal left (%.2f), goal right (%.2f)",
             		leftPower, rightPower, goalLeftPower, goalRightPower);
+            telemetry.addData("Right encoder", rightDrive.getCurrentPosition());
+            telemetry.addData("Left encoder", leftDrive.getCurrentPosition());
             telemetry.update();
         }
     }
