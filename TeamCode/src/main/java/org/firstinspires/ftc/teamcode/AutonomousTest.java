@@ -8,16 +8,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class AutonomousTest extends LinearOpMode {
 
 	private ElapsedTime runTime = new ElapsedTime();
-	private double runtimeLimitMilli = 30000;
 
     @Override
     public void runOpMode() {
-    	
+
     	OPModeConstants opModeConstants = OPModeConstants.getInstance();
     	OPModeDriveHelper driver = OPModeDriveHelper.getInstance();
 
-    	opModeConstants.setRuntimeLimitMilliseconds(30000d);
-    	driver.init(telemetry, hardwareMap, opModeConstants, runTime);
+    	driver.init(telemetry, hardwareMap, opModeConstants, this);
     	
     	waitForStart();
 		telemetry.addData("Status: ", "Started");
@@ -34,12 +32,12 @@ public class AutonomousTest extends LinearOpMode {
     	sleep(2000);
     	
     	opModeConstants.setTurnDirection(OPModeConstants.TurnDirection.RIGHT);
-    	driver.gyroTurn(opModeConstants.getTurnDirection(), opModeConstants.getAutoSpeed(), 360.0);
+    	driver.driveTurn(opModeConstants.getTurnDirection(), opModeConstants.getAutoSpeed(), 360.0);
     	sleep(2000);
     	
     	opModeConstants.setTurnDirection(OPModeConstants.TurnDirection.LEFT);
     	opModeConstants.setAutoSpeed(OPModeConstants.AutonomousSpeed.HIGH);;
-    	driver.gyroTurn(opModeConstants.getTurnDirection(), opModeConstants.getAutoSpeed(), 360.0);
+    	driver.driveTurn(opModeConstants.getTurnDirection(), opModeConstants.getAutoSpeed(), 360.0);
     	sleep(2000);
     	
     	opModeConstants.setDriveDirection(OPModeConstants.DriveDirection.REVERSE);

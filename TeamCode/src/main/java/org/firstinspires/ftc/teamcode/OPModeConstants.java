@@ -6,6 +6,7 @@ public class OPModeConstants {
 	
 	public final double ticksPerInch = 91.6732d;
 	public final double gyroErrorThreshold = 1.0d;
+	public final double degreesToInch = 0.1309d;
 	
 	// Enumerations
 	
@@ -32,7 +33,6 @@ public class OPModeConstants {
 	private AutonomousSpeed autoSpeed;
 	private DriveDirection driveDirection;
 	private TurnDirection turnDirection;
-	private double runtimeLimitMilliseconds;
 	
 	// Constructor
 	
@@ -40,7 +40,6 @@ public class OPModeConstants {
 		setAutoSpeed(AutonomousSpeed.HIGH);
 		setDriveDirection(DriveDirection.FORWARD);
 		setTurnDirection(TurnDirection.RIGHT);
-		setRuntimeLimitMilliseconds(30000d);
 	}
 	
 	public static OPModeConstants getInstance() {
@@ -78,9 +77,4 @@ public class OPModeConstants {
 	public TurnDirection getTurnDirection() {
 		return turnDirection;
 	}
-
-	// Runtime Limit (Only needed in autonomous mode)
-	public void setRuntimeLimitMilliseconds(double milliseconds) {runtimeLimitMilliseconds = milliseconds; }
-
-	public double getRuntimeLimitMilliseconds() { return runtimeLimitMilliseconds; }
 }
