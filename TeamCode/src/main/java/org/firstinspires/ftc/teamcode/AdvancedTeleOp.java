@@ -12,13 +12,15 @@ public class AdvancedTeleOp extends LinearOpMode {
 	// Constants
 	// Use speed multiplier to set top speed, 1 means no change
 	private double SPEED_MULTIPLIER = 0.75;
-	// Sets how quickly the power to the wheels changes as a percent of the difference goal speed and current speed (max 1)
+	private  double ARM_MULTIPLIER = 0.3;
+    // Sets how quickly the power to the wheels changes as a percent of the difference goal speed and current speed (max 1)
 	private double ACCELERATION_MULTIPLIER = (0.5);
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
+    private DcMotor armDrive = null;
 
     @Override
     public void runOpMode() {
@@ -30,22 +32,28 @@ public class AdvancedTeleOp extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         leftDrive  = hardwareMap.get(DcMotor.class, "left_wheel");
         rightDrive = hardwareMap.get(DcMotor.class, "right_wheel");
+        armDrive = hardwareMap.get(DcMotor.class, "arm");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        armDrive.setDirection(DcMotor.Direction.FORWARD);
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
+        double armPower = 0;
         double leftPower = 0;
         double rightPower = 0;
+
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -60,6 +68,7 @@ public class AdvancedTeleOp extends LinearOpMode {
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
             goalLeftPower  = gamepad1.left_stick_y * SPEED_MULTIPLIER;
             goalRightPower = gamepad1.right_stick_y * SPEED_MULTIPLIER;
+            armPower = (gamepad1.right_trigger - gamepad1.left_trigger) * ARM_MULTIPLIER;
             
             //Set the wheel power to the difference between the desired and actual power times the acceleration multiplier.
             leftPower = leftPower + ((goalLeftPower - leftPower) * ACCELERATION_MULTIPLIER);
@@ -68,6 +77,7 @@ public class AdvancedTeleOp extends LinearOpMode {
             // Send calculated power to wheels
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
+            armDrive.setPower(armPower);
 
             // Show the elapsed game time, goal wheel power, and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
