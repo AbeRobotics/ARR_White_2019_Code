@@ -46,6 +46,10 @@ public class AdvancedTeleOp extends LinearOpMode {
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
