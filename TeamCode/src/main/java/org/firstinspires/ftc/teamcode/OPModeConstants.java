@@ -5,9 +5,13 @@ public class OPModeConstants {
 	// Constant Values
 	public final double ticksPerInch = 91.6732d;
 	public final double gyroErrorThreshold = 3.0d;
-	public final double degreesToInch = 0.1326450232d;
+	public final double degreesToInch = 0.13308135546d;
 	public final double driveErrorThreshold = 4d;
 	public final double slowdownMultiplier = 0.03d;
+	public final double armRaiseTicks = 0;
+
+	//Time Limits
+	public final double armRaiseTimeMilli = 99999999;
 	
 	// Enumerations
 	

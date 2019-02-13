@@ -17,6 +17,7 @@ public class AdvancedTeleOp extends LinearOpMode {
 	private double ACCELERATION_MULTIPLIER = (0.5);
 
     // Declare OpMode members.
+    private OPModeConstants opModeConstants = OPModeConstants.getInstance();
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
@@ -50,6 +51,10 @@ public class AdvancedTeleOp extends LinearOpMode {
         leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        Task_RaiseArm raiseArm = new Task_RaiseArm(hardwareMap,this, opModeConstants);
+        Task_LowerArm lowerArm = new Task_LowerArm(hardwareMap,this, opModeConstants);
+
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -57,6 +62,7 @@ public class AdvancedTeleOp extends LinearOpMode {
         double armPower = 0;
         double leftPower = 0;
         double rightPower = 0;
+
 
 
         // run until the end of the match (driver presses STOP)
@@ -77,6 +83,14 @@ public class AdvancedTeleOp extends LinearOpMode {
             //Set the wheel power to the difference between the desired and actual power times the acceleration multiplier.
             leftPower = leftPower + ((goalLeftPower - leftPower) * ACCELERATION_MULTIPLIER);
             rightPower = rightPower + ((goalRightPower - rightPower) * ACCELERATION_MULTIPLIER);
+
+            if(gamepad1.y){
+                raiseArm.performTask();
+            }
+
+            if(gamepad1.a){
+                lowerArm.performTask();
+            }
 
             // Send calculated power to wheels
             leftDrive.setPower(leftPower);
