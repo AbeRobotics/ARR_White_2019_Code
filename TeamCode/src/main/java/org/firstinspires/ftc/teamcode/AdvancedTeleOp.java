@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Advanced Tele Op", group="Linear Opmode")
@@ -22,6 +23,8 @@ public class AdvancedTeleOp extends LinearOpMode {
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor armDrive = null;
+    private DcMotor collectionDrive = null;
+    private boolean collect = true;
 
     @Override
     public void runOpMode() {
@@ -34,22 +37,27 @@ public class AdvancedTeleOp extends LinearOpMode {
         leftDrive  = hardwareMap.get(DcMotor.class, "left_wheel");
         rightDrive = hardwareMap.get(DcMotor.class, "right_wheel");
         armDrive = hardwareMap.get(DcMotor.class, "arm");
+        collectionDrive = hardwareMap.get(DcMotor.class, "collector");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
         armDrive.setDirection(DcMotor.Direction.FORWARD);
+        collectionDrive.setDirection(DcMotor.Direction.FORWARD);
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        armDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        collectionDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        collectionDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        collectionDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         Task_RaiseArm raiseArm = new Task_RaiseArm(hardwareMap,this, opModeConstants);
         Task_LowerArm lowerArm = new Task_LowerArm(hardwareMap,this, opModeConstants);
@@ -62,6 +70,7 @@ public class AdvancedTeleOp extends LinearOpMode {
         double armPower = 0;
         double leftPower = 0;
         double rightPower = 0;
+        double collectorPower = 0.75;
 
 
 
@@ -92,10 +101,28 @@ public class AdvancedTeleOp extends LinearOpMode {
                 lowerArm.performTask();
             }
 
+            if(gamepad1.x){
+                collect = !collect;
+                if(collect){
+                    collectionDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+                }
+                else {
+                    collectionDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+                }
+                collectorPower = 0.75;
+                sleep(10);
+
+            }
+
+            if(gamepad1.b){
+                collectorPower = 0;
+            }
+
             // Send calculated power to wheels
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
             armDrive.setPower(armPower);
+            collectionDrive.setPower(collectorPower);
 
             // Show the elapsed game time, goal wheel power, and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());

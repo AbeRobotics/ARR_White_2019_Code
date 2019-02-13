@@ -83,10 +83,12 @@ public class OPModeDriveHelperV3 {
 
 		double totalTicks = angle * opModeConstants.degreesToInch * opModeConstants.ticksPerInch;
 
-		leftWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-		rightWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+		leftWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		rightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		leftWheel.setTargetPosition((int)totalTicks);
+		rightWheel.setTargetPosition((int)totalTicks);
 
-		while((!onPosition(totalTicks, rightWheel) || !onPosition(totalTicks, leftWheel)) && opMode.isStopRequested() == false) {
+		while((rightWheel.isBusy() || leftWheel.isBusy()) && opMode.isStopRequested() == false) {
 			rightWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(rightWheel.getCurrentPosition())), Math.sqrt(Math.abs(rightWheel.getCurrentPosition() + opModeConstants.gyroErrorThreshold))), 0.1, 1));
 			leftWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(leftWheel.getCurrentPosition())), Math.sqrt(Math.abs(leftWheel.getCurrentPosition() + opModeConstants.gyroErrorThreshold))), 0.1, 1));
 

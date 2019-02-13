@@ -29,11 +29,13 @@ public class Task_RaiseArm extends IOPModeTaskBase {
     public void performTask(){
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor.setPower(0.3);
+        armMotor.setPower(0.2);
         armMotor.setTargetPosition((int)opModeConstants.armRaiseTicks);
         while(!opMode.isStopRequested() && !taskComplete && opMode.time < startTime + opModeConstants.armRaiseTimeMilli){
             if(!armMotor.isBusy()){
                 taskComplete = true;
+                opMode.telemetry.addData("Arm position", armMotor.getCurrentPosition());
+                opMode.telemetry.update();
             }
             sleep(10);
         }
