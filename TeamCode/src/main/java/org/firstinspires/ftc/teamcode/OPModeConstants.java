@@ -8,10 +8,10 @@ public class OPModeConstants {
 	public final double degreesToInch = 0.13308135546d;
 	public final double driveErrorThreshold = 4d;
 	public final double slowdownMultiplier = 0.03d;
-	public final double armRaiseTicks = 360;
+	public final double armRaiseTicks = 5700d;
 
 	//Time Limits
-	public final double armRaiseTimeMilli = 99999999;
+	public final double armRaiseTimeMilli = 5000;
 	
 	// Enumerations
 	

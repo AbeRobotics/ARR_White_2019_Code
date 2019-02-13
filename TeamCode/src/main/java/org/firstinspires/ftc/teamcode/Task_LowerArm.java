@@ -29,8 +29,9 @@ public class Task_LowerArm extends IOPModeTaskBase {
     public void performTask(){
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor.setPower(0.3);
         armMotor.setTargetPosition(0-(int)opModeConstants.armRaiseTicks);
+        armMotor.setPower(0.2);
+
         while(!opMode.isStopRequested() && !taskComplete && opMode.time < startTime + opModeConstants.armRaiseTimeMilli){
             if(!armMotor.isBusy()){
                 taskComplete = true;

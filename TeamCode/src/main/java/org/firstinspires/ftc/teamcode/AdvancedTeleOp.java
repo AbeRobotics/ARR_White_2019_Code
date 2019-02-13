@@ -110,7 +110,7 @@ public class AdvancedTeleOp extends LinearOpMode {
                     collectionDrive.setDirection(DcMotorSimple.Direction.REVERSE);
                 }
                 collectorPower = 0.75;
-                sleep(10);
+                sleep(15);
 
             }
 
@@ -130,6 +130,7 @@ public class AdvancedTeleOp extends LinearOpMode {
             		leftPower, rightPower, goalLeftPower, goalRightPower);
             telemetry.addData("Right encoder", rightDrive.getCurrentPosition());
             telemetry.addData("Left encoder", leftDrive.getCurrentPosition());
+            telemetry.addData("arm encoder", armDrive.getCurrentPosition());
             telemetry.update();
         }
     }
