@@ -6,6 +6,7 @@ package org.firstinspires.ftc.teamcode;
  */
 
 public abstract class IOPModeTaskBase {
+    public abstract void init();
     public abstract boolean getTaskStatus();
     public abstract void performTask();
     public abstract void reset();

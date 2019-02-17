@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+/**
+ * Created by Kyle Stang on 31-Oct-2018
+ * Adapted from Akanksha Joshi
+ */
 public class OPModeConstants {
 	
 	// Constant Values
@@ -31,6 +35,13 @@ public class OPModeConstants {
 		RIGHT,
 		LEFT
 	}
+
+	public enum GoldLocation{
+		LEFT,
+		MIDDLE,
+		RIGHT,
+		UNKNOWN
+	}
 	
 	// Instance variables
 	
@@ -38,13 +49,15 @@ public class OPModeConstants {
 	private AutonomousSpeed autoSpeed;
 	private DriveDirection driveDirection;
 	private TurnDirection turnDirection;
+	private GoldLocation goldLocation;
 	
 	// Constructor
 	
 	private OPModeConstants() {
-		setAutoSpeed(AutonomousSpeed.HIGH);
+		setAutoSpeed(AutonomousSpeed.LOW);
 		setDriveDirection(DriveDirection.FORWARD);
 		setTurnDirection(TurnDirection.RIGHT);
+		setGoldLocation(GoldLocation.UNKNOWN);
 	}
 	
 	public static OPModeConstants getInstance() {
@@ -81,5 +94,12 @@ public class OPModeConstants {
 	
 	public TurnDirection getTurnDirection() {
 		return turnDirection;
+	}
+
+	// Gold Location
+	public void setGoldLocation(GoldLocation location){ goldLocation = location; }
+
+	public GoldLocation getGoldLocation(){
+		return goldLocation;
 	}
 }

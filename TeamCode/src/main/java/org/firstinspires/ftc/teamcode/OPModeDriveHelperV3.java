@@ -9,6 +9,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import static java.lang.Math.min;
 
+/**
+ * Created by Kyle Stang on 30-Jan-2019
+ * Adapted from Akanksha Joshi
+ */
 public class OPModeDriveHelperV3 {
 	private static OPModeDriveHelperV3 instance;
     private  OPModeConstants opModeConstants;
@@ -136,15 +140,6 @@ public class OPModeDriveHelperV3 {
     	}
     	return onTarget;
     }
-
-	private boolean onPosition(double position, DcMotor wheel){
-		if(Math.abs(wheel.getCurrentPosition() - Math.abs(position)) > opModeConstants.driveErrorThreshold){
-			return false;
-		}
-		else{
-			return true;
-		}
-	}
 
     // Returns power for wheels
 	private double getPower(OPModeConstants.AutonomousSpeed speed) {

@@ -6,8 +6,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+/**
+ * Created by Kyle Stang on 24-Oct-2018
+ */
 @TeleOp(name="Advanced Tele Op", group="Linear Opmode")
-//@Disabled
 public class AdvancedTeleOp extends LinearOpMode {
 	
 	// Constants
@@ -24,7 +26,8 @@ public class AdvancedTeleOp extends LinearOpMode {
     private DcMotor rightDrive = null;
     private DcMotor armDrive = null;
     private DcMotor collectionDrive = null;
-    private boolean collect = true;
+    private Task_RaiseArm raiseArm = new Task_RaiseArm(hardwareMap,this, opModeConstants);
+    private Task_LowerArm lowerArm = new Task_LowerArm(hardwareMap,this, opModeConstants);
 
     @Override
     public void runOpMode() {
@@ -59,8 +62,8 @@ public class AdvancedTeleOp extends LinearOpMode {
         armDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         collectionDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        Task_RaiseArm raiseArm = new Task_RaiseArm(hardwareMap,this, opModeConstants);
-        Task_LowerArm lowerArm = new Task_LowerArm(hardwareMap,this, opModeConstants);
+        raiseArm.init();
+        lowerArm.init();
 
 
         // Wait for the game to start (driver presses PLAY)
@@ -70,7 +73,7 @@ public class AdvancedTeleOp extends LinearOpMode {
         double armPower = 0;
         double leftPower = 0;
         double rightPower = 0;
-        double collectorPower = 0.75;
+        double collectorPower = 0;
 
 
 
@@ -93,29 +96,24 @@ public class AdvancedTeleOp extends LinearOpMode {
             leftPower = leftPower + ((goalLeftPower - leftPower) * ACCELERATION_MULTIPLIER);
             rightPower = rightPower + ((goalRightPower - rightPower) * ACCELERATION_MULTIPLIER);
 
-            if(gamepad1.y){
+            if(gamepad1.dpad_up){
                 raiseArm.performTask();
             }
 
-            if(gamepad1.a){
+            if(gamepad1.dpad_down){
                 lowerArm.performTask();
-            }
-
-            if(gamepad1.x){
-                collect = !collect;
-                if(collect){
-                    collectionDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-                }
-                else {
-                    collectionDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-                }
-                collectorPower = 0.75;
-                sleep(15);
-
             }
 
             if(gamepad1.b){
                 collectorPower = 0;
+            }
+
+            if(gamepad1.a){
+                collectorPower = 0.75;
+            }
+
+            if(gamepad1.y){
+                collectorPower = -0.75;
             }
 
             // Send calculated power to wheels

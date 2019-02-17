@@ -4,6 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+/**
+ * Created by Kyle Stang on 23-Jan-2018;
+ */
 @Autonomous(name="Autonomous Test V3", group="Autonomous Tests")
 public class AutonomousTestV3 extends LinearOpMode {
 

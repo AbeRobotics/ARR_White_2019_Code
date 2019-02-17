@@ -8,6 +8,10 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 
+/**
+ * Created by Kyle Stang on 21-Nov-2018
+ * Adapted from Akanksha Joshi
+ */
 public class OPModeGyroHelperV2 extends Activity implements SensorEventListener {
 
     private SensorManager mSensorManager;
