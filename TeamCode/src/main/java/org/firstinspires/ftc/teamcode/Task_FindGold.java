@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
@@ -21,7 +20,7 @@ public class Task_FindGold extends IOPModeTaskBase {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
-    private static final String VUFORIA_KEY = " -- YOUR NEW VUFORIA KEY GOES HERE  --- ";
+    private static final String VUFORIA_KEY = "AfJ/NgH/////AAABmf3lER8noEwfiY17SFpoG3eMTTw5Nzdz1TM9af2/+C5KuTgWbedb9QWWBNGvtxHegA+NVoQdwpd9XPKRAXsqFoyZOg66k/wCHWZf3+IS5S126NXAJOgIwRxLdhyArNlDR4I+MKwiT3ykNQBIS752I/bKshDPjwVa7Q+PRXhKfrkYyIDwJozr8oD+nN7mZWQrW5b33RDmRvpYjTBhjppIfM603G4kCFewU8rYcqtyEWtmfQJtNXfn4AA30x9ZBa9asBgmy9hujH0Gy2J9ERUbBuI43l063ONRkHWpAwMDyIQ4z+wOBFSDCcj4AUaBUNBJzoYAUozXS+DIkmtnITrUmfZq6wkyeh63xKxU+Q5lJBfx";
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
 
@@ -53,7 +52,7 @@ public class Task_FindGold extends IOPModeTaskBase {
         if (tfod != null) {
             tfod.activate();
         }
-        while (!taskComplete){
+        while (!taskComplete && !opMode.isStopRequested()){
             if (tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.

@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -26,8 +25,8 @@ public class AdvancedTeleOp extends LinearOpMode {
     private DcMotor rightDrive = null;
     private DcMotor armDrive = null;
     private DcMotor collectionDrive = null;
-    private Task_RaiseArm raiseArm = new Task_RaiseArm(hardwareMap,this, opModeConstants);
-    private Task_LowerArm lowerArm = new Task_LowerArm(hardwareMap,this, opModeConstants);
+//    private Task_RaiseArm raiseArm = new Task_RaiseArm(hardwareMap,this, opModeConstants);
+//    private Task_LowerArm lowerArm = new Task_LowerArm(hardwareMap,this, opModeConstants);
 
     @Override
     public void runOpMode() {
@@ -62,8 +61,8 @@ public class AdvancedTeleOp extends LinearOpMode {
         armDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         collectionDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        raiseArm.init();
-        lowerArm.init();
+//        raiseArm.init();
+//        lowerArm.init();
 
 
         // Wait for the game to start (driver presses PLAY)
@@ -97,11 +96,11 @@ public class AdvancedTeleOp extends LinearOpMode {
             rightPower = rightPower + ((goalRightPower - rightPower) * ACCELERATION_MULTIPLIER);
 
             if(gamepad1.dpad_up){
-                raiseArm.performTask();
+ //               raiseArm.performTask();
             }
 
             if(gamepad1.dpad_down){
-                lowerArm.performTask();
+//                lowerArm.performTask();
             }
 
             if(gamepad1.b){
