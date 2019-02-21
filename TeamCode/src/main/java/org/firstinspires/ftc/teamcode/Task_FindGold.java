@@ -11,10 +11,10 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-/*
-Created by Kyle Stang on 15-Feb-2019
-Adapted from Akanksha Joshi
-and org.firstinspires.ftc
+/**
+ * Created by Kyle Stang on 15-Feb-2019
+ * Adapted from Akanksha Joshi
+ * and org.firstinspires.ftc
  */
 public class Task_FindGold extends IOPModeTaskBase {
 
