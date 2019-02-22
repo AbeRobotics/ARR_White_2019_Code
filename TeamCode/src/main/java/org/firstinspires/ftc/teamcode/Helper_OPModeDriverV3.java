@@ -13,8 +13,8 @@ import static java.lang.Math.min;
  * Created by Kyle Stang on 30-Jan-2019
  * Adapted from Akanksha Joshi
  */
-public class OPModeDriveHelperV3 {
-	private static OPModeDriveHelperV3 instance;
+public class Helper_OPModeDriverV3 {
+	private static Helper_OPModeDriverV3 instance;
     private  OPModeConstants opModeConstants;
     private  Telemetry telemetry;
     private  HardwareMap hardwareMap;
@@ -23,9 +23,9 @@ public class OPModeDriveHelperV3 {
     private DcMotor rightWheel;
 
     // Returns instance or creates a new one if null
-    public static OPModeDriveHelperV3 getInstance() {
+    public static Helper_OPModeDriverV3 getInstance() {
         if(instance==null) {
-            instance = new OPModeDriveHelperV3();
+            instance = new Helper_OPModeDriverV3();
         }
         return instance;
     }
@@ -40,7 +40,7 @@ public class OPModeDriveHelperV3 {
         rightWheel = hardwareMap.dcMotor.get("right_wheel");
     }
 
-    private OPModeDriveHelperV3(){}
+    private Helper_OPModeDriverV3(){}
     
     // Drives with previously used settings
     public boolean drive(Double inches) {
