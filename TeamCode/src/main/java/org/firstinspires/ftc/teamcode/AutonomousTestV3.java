@@ -4,8 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Autonomous Test", group="Autonomous Tests")
-public class AutonomousTest extends LinearOpMode {
+/**
+ * Created by Kyle Stang on 23-Jan-2018;
+ */
+@Autonomous(name="Autonomous Test V3", group="Autonomous Tests")
+public class AutonomousTestV3 extends LinearOpMode {
 
 	private ElapsedTime runTime = new ElapsedTime();
 
@@ -13,15 +16,15 @@ public class AutonomousTest extends LinearOpMode {
     public void runOpMode() {
 
     	OPModeConstants opModeConstants = OPModeConstants.getInstance();
-    	OPModeDriveHelper driver = OPModeDriveHelper.getInstance();
+    	OPModeDriveHelperV3 driver = OPModeDriveHelperV3.getInstance();
 
     	driver.init(telemetry, hardwareMap, opModeConstants, this);
     	
     	waitForStart();
 		telemetry.addData("Status: ", "Started");
 		telemetry.update();
-		sleep(1000);
-    	runTime.reset();
+		//sleep(1000);
+    	//runTime.reset();
     	
     	opModeConstants.setAutoSpeed(OPModeConstants.AutonomousSpeed.LOW);
     	opModeConstants.setDriveDirection(OPModeConstants.DriveDirection.FORWARD);

@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -13,9 +11,9 @@ public class OPModeDriveHelper {
     private  OPModeConstants opModeConstants;
     private  Telemetry telemetry;
     private  HardwareMap hardwareMap;
-    private ElapsedTime elapsedTime;
-    DcMotor leftWheel;
-    DcMotor rightWheel;
+    private LinearOpMode opMode;
+    private DcMotor leftWheel;
+    private DcMotor rightWheel;
     
     // Returns instance or creates a new one if null
     public static OPModeDriveHelper getInstance() {
@@ -25,12 +23,12 @@ public class OPModeDriveHelper {
         return instance;
     }
     
-    public void init(Telemetry telemetry, HardwareMap hardwareMap, OPModeConstants opModeConstants, ElapsedTime elapsedTime) {
+    public void init(Telemetry telemetry, HardwareMap hardwareMap, OPModeConstants opModeConstants, LinearOpMode opMode) {
     	this.telemetry = telemetry;
     	this.hardwareMap = hardwareMap;
         this.opModeConstants = opModeConstants;
-        this.elapsedTime = elapsedTime;
-    	
+        this.opMode = opMode;
+
         leftWheel = hardwareMap.dcMotor.get("left_wheel");
         rightWheel = hardwareMap.dcMotor.get("right_wheel");
     }
@@ -56,10 +54,10 @@ public class OPModeDriveHelper {
         leftWheel.setTargetPosition((int)totalTicks);
         rightWheel.setTargetPosition((int)totalTicks);
         
-        while((leftWheel.isBusy() || rightWheel.isBusy()) && elapsedTime.milliseconds() < opModeConstants.getRuntimeLimitMilliseconds()) {
+        while((leftWheel.isBusy() || rightWheel.isBusy()) && opMode.isStopRequested() == false) {
             telemetry.addData("Left Current Position -",leftWheel.getCurrentPosition());
-            telemetry.addData("Target positions: ", totalTicks);
             telemetry.addData("Right Current Position -",rightWheel.getCurrentPosition());
+			telemetry.addData("Target positions: ", totalTicks);
             telemetry.update();
             sleep(10);
         }
@@ -67,8 +65,37 @@ public class OPModeDriveHelper {
         resetDriveEncoders();
         return true;
     }
-    
-    // Turns the robot
+	// Turns the robot using encoders
+    public boolean driveTurn(OPModeConstants.TurnDirection direction, OPModeConstants.AutonomousSpeed speed, double angle){
+    	setAllStop();
+    	resetDriveEncoders();
+
+    	setTurnDirection(direction);
+		while(angle > 360) {angle -= 360;}
+		while(angle < 0) {angle += 360;}
+
+		double totalTicks = angle * opModeConstants.degreesToInch * opModeConstants.ticksPerInch;
+
+		leftWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		rightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		leftWheel.setPower(getPower(speed));
+		rightWheel.setPower(getPower(speed));
+		leftWheel.setTargetPosition((int)totalTicks);
+		rightWheel.setTargetPosition((int)totalTicks);
+
+		while((leftWheel.isBusy() || rightWheel.isBusy()) && opMode.isStopRequested() == false) {
+			telemetry.addData("Left Current Position -",leftWheel.getCurrentPosition());
+			telemetry.addData("Right Current Position -",rightWheel.getCurrentPosition());
+			telemetry.addData("Target positions: ", totalTicks);
+			telemetry.update();
+			sleep(10);
+		}
+		setAllStop();
+		resetDriveEncoders();
+		return true;
+	}
+
+    // Turns the robot *THE GYROSCOPE DOESN'T WORK, DO NOT USE*
     public boolean gyroTurn(OPModeConstants.TurnDirection direction, OPModeConstants.AutonomousSpeed speed, double angle) {
     	setAllStop();
     	resetDriveEncoders();
@@ -81,7 +108,7 @@ public class OPModeDriveHelper {
     	rightWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     	
     	OPModeGyroHelper gyroHelper = new OPModeGyroHelper();
-    	while(!onHeading(angle, gyroHelper) && elapsedTime.milliseconds() < opModeConstants.getRuntimeLimitMilliseconds()) {
+    	while(!onHeading(angle, gyroHelper) && opMode.isStopRequested() == false) {
     		leftWheel.setPower(getPower(speed));
             rightWheel.setPower(getPower(speed));
     	}
@@ -95,7 +122,7 @@ public class OPModeDriveHelper {
     private boolean onHeading(double targetAngle, OPModeGyroHelper gyroHelper) {
     	boolean onTarget = false;
     	
-    	double DegreesOffTarget = Math.abs(targetAngle - gyroHelper.getGyroAngle(telemetry, hardwareMap, elapsedTime));
+    	double DegreesOffTarget = Math.abs(targetAngle - gyroHelper.getGyroAngle(telemetry, hardwareMap));
     	if(DegreesOffTarget < opModeConstants.gyroErrorThreshold) {
     		onTarget = true;
     	}

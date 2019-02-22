@@ -14,8 +14,7 @@ public class AutoDriveTest extends LinearOpMode{
     @Override
     public void runOpMode() {
 
-        opModeConstants.setRuntimeLimitMilliseconds(30000d);
-        opModeDriveHelper.init(telemetry, hardwareMap, opModeConstants, elapsedTime);
+        opModeDriveHelper.init(telemetry, hardwareMap, opModeConstants, this);
 
         waitForStart();
         elapsedTime.reset();
