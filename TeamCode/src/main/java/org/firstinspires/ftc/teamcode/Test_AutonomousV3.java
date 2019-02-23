@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by Kyle Stang on 23-Jan-2018;
  */
 @Autonomous(name="Autonomous Test V3", group="Autonomous Tests")
-public class AutonomousTestV3 extends LinearOpMode {
+public class Test_AutonomousV3 extends LinearOpMode {
 
 	private ElapsedTime runTime = new ElapsedTime();
 
@@ -16,7 +16,7 @@ public class AutonomousTestV3 extends LinearOpMode {
     public void runOpMode() {
 
     	OPModeConstants opModeConstants = OPModeConstants.getInstance();
-    	OPModeDriveHelperV3 driver = OPModeDriveHelperV3.getInstance();
+    	Helper_OPModeDriverV3 driver = Helper_OPModeDriverV3.getInstance();
 
     	driver.init(telemetry, hardwareMap, opModeConstants, this);
     	

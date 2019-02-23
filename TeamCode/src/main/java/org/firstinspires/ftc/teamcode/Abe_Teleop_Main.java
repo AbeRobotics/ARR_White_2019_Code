@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by Kyle Stang on 24-Oct-2018
  */
 @TeleOp(name="Advanced Tele Op", group="Linear Opmode")
-public class AdvancedTeleOp extends LinearOpMode {
+public class Abe_Teleop_Main extends LinearOpMode {
 	
 	// Constants
 	// Use speed multiplier to set top speed, 1 means no change

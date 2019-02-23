@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -27,13 +28,15 @@ public class Task_FindGold extends IOPModeTaskBase {
     private HardwareMap hardwareMap;
     private LinearOpMode opMode;
     private OPModeConstants opModeConstants;
+    private ElapsedTime elapsedTime;
 
     private boolean taskComplete = false;
 
-    public Task_FindGold(LinearOpMode opMode, HardwareMap hardwareMap, OPModeConstants opModeConstants){
+    public Task_FindGold(LinearOpMode opMode, HardwareMap hardwareMap, OPModeConstants opModeConstants, ElapsedTime elapsedTime){
         this.opMode = opMode;
         this.hardwareMap = hardwareMap;
         this.opModeConstants = opModeConstants;
+        this.elapsedTime = elapsedTime;
     }
 
     @Override
@@ -49,10 +52,11 @@ public class Task_FindGold extends IOPModeTaskBase {
 
     @Override
     public void performTask() {
+        double startTime = elapsedTime.milliseconds();
         if (tfod != null) {
             tfod.activate();
         }
-        while (!taskComplete && !opMode.isStopRequested()){
+        while (!taskComplete && !opMode.isStopRequested() && elapsedTime.milliseconds() < startTime + opModeConstants.findGoldTimeMilli){
             if (tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
@@ -83,6 +87,7 @@ public class Task_FindGold extends IOPModeTaskBase {
                                 opMode.telemetry.addData("Gold Mineral Position", "Center");
                                 opModeConstants.setGoldLocation(OPModeConstants.GoldLocation.MIDDLE);
                             }
+                            taskComplete = true;
                         }
                     }
                     opMode.telemetry.update();
