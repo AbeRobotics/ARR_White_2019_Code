@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="Auto Drive Test", group="Autonomous Tests")
-public class AutoDriveTest extends LinearOpMode{
+public class Test_AutoDriving extends LinearOpMode{
 
     private ElapsedTime elapsedTime = new ElapsedTime();
     private OPModeConstants opModeConstants = OPModeConstants.getInstance();

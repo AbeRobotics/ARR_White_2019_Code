@@ -4,18 +4,18 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Image Recognition Test", group="Autonomous Tests")
-public class ImageRecognitionTest extends LinearOpMode{
+@Autonomous(name="Drop Flag Test", group="Autonomous Tests")
+public class Test_DropFlag extends LinearOpMode{
 
     private ElapsedTime elapsedTime = new ElapsedTime();
+    private Task_DropFlag dropFlag;
     private OPModeConstants opModeConstants = OPModeConstants.getInstance();
-    private Task_FindGold findGold;
 
     @Override
     public void runOpMode() {
-        findGold = new Task_FindGold(this, this.hardwareMap, opModeConstants);
+        dropFlag = new Task_DropFlag(this, hardwareMap, elapsedTime, opModeConstants);
 
-        findGold.init();
+        dropFlag.init();
 
         waitForStart();
         elapsedTime.reset();
@@ -23,9 +23,13 @@ public class ImageRecognitionTest extends LinearOpMode{
         telemetry.update();
         sleep(1000);
 
-        findGold.performTask();
+        dropFlag.performTask();
+        while (dropFlag.getTaskStatus() == false){
+            sleep(10);
+        }
 
-        telemetry.addData("Gold position", opModeConstants.getGoldLocation());
+
+        telemetry.addData("Status", dropFlag.getTaskStatus());
         telemetry.update();
         sleep(10000);
     }
