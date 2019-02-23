@@ -33,6 +33,8 @@ public class Task_MoveCenterGold extends IOPModeTaskBase {
     public void performTask(){
         driveHelper.drive(33.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
 
+        sleep(500);
+
         driveHelper.drive(33.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.REVERSE);
 
         taskComplete = true;

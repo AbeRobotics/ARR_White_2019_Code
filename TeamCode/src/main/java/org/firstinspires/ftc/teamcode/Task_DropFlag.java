@@ -40,8 +40,8 @@ public class Task_DropFlag extends IOPModeTaskBase {
                 taskComplete = true;
                 break;
             }
-            flagHolder.setPosition(0.5);
-            if (flagHolder.getPosition() == 0.5) {
+            flagHolder.setPosition(1);
+            if (flagHolder.getPosition() == 1) {
                 taskComplete = true;
             }
         }

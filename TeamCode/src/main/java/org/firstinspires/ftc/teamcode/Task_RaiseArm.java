@@ -44,12 +44,12 @@ public class Task_RaiseArm extends IOPModeTaskBase {
 
         while(!opMode.isStopRequested() && !taskComplete && elapsedTime.milliseconds() < startTime + opModeConstants.armRaiseTimeMilli){
             if(!armMotor.isBusy()){
-                taskComplete = true;
                 opMode.telemetry.addData("Arm position", armMotor.getCurrentPosition());
                 opMode.telemetry.update();
             }
             sleep(10);
         }
+        taskComplete = true;
 
     }
 

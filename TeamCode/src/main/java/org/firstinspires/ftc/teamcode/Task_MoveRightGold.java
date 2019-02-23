@@ -34,9 +34,15 @@ public class Task_MoveRightGold extends IOPModeTaskBase {
 
         driveHelper.driveTurn(OPModeConstants.TurnDirection.RIGHT, OPModeConstants.AutonomousSpeed.LOW, opModeConstants.mineralAngleDegrees);
 
+        sleep(500);
+
         driveHelper.drive(36.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
 
+        sleep(500);
+
         driveHelper.drive(36.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.REVERSE);
+
+        sleep(500);
 
         driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, opModeConstants.mineralAngleDegrees);
 

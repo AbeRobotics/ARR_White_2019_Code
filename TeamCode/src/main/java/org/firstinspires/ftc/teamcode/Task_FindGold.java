@@ -56,7 +56,11 @@ public class Task_FindGold extends IOPModeTaskBase {
         if (tfod != null) {
             tfod.activate();
         }
-        while (!taskComplete && !opMode.isStopRequested() && elapsedTime.milliseconds() < startTime + opModeConstants.findGoldTimeMilli){
+        while (!taskComplete && !opMode.isStopRequested()){
+            if(elapsedTime.milliseconds() > startTime + opModeConstants.findGoldTimeMilli){
+                taskComplete = true;
+                break;
+            }
             if (tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
@@ -83,7 +87,7 @@ public class Task_FindGold extends IOPModeTaskBase {
                             } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                                 opMode.telemetry.addData("Gold Mineral Position", "Right");
                                 opModeConstants.setGoldLocation(OPModeConstants.GoldLocation.RIGHT);
-                            } else {
+                            } else if((silverMineral1X < goldMineralX  && goldMineralX < silverMineral2X) || (silverMineral2X < goldMineralX && goldMineralX < silverMineral1X)){
                                 opMode.telemetry.addData("Gold Mineral Position", "Center");
                                 opModeConstants.setGoldLocation(OPModeConstants.GoldLocation.CENTER);
                             }
