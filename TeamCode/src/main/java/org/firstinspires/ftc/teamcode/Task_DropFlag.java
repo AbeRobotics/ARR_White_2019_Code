@@ -27,23 +27,24 @@ public class Task_DropFlag extends IOPModeTaskBase {
     @Override
     public void init() {
         flagHolder = hardwareMap.servo.get("flag_holder");
+        taskComplete = false;
     }
 
     @Override
     public void performTask(){
         double startTime = elapsedTime.milliseconds();
- //       while(taskComplete == false) {
+        while(taskComplete == false) {
             if (elapsedTime.milliseconds() > startTime + opModeConstants.dropFlagTimeMilli) {
                 opMode.telemetry.addData("status", "timeout");
                 opMode.telemetry.update();
                 taskComplete = true;
- //               break;
+                break;
             }
-            flagHolder.setPosition(90);
-            if (flagHolder.getPosition() == 90) {
+            flagHolder.setPosition(0.5);
+            if (flagHolder.getPosition() == 0.5) {
                 taskComplete = true;
             }
- //       }
+        }
     }
 
     @Override

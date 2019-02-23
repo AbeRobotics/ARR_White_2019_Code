@@ -85,7 +85,7 @@ public class Task_FindGold extends IOPModeTaskBase {
                                 opModeConstants.setGoldLocation(OPModeConstants.GoldLocation.RIGHT);
                             } else {
                                 opMode.telemetry.addData("Gold Mineral Position", "Center");
-                                opModeConstants.setGoldLocation(OPModeConstants.GoldLocation.MIDDLE);
+                                opModeConstants.setGoldLocation(OPModeConstants.GoldLocation.CENTER);
                             }
                             taskComplete = true;
                         }

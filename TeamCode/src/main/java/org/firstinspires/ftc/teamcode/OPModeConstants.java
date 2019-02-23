@@ -13,6 +13,7 @@ public class OPModeConstants {
 	public final double driveErrorThreshold = 4d;
 	public final double slowdownMultiplier = 0.03d;
 	public final double armRaiseTicks = 5700d;
+	public final double mineralAngleDegrees = 24.376d;
 
 	//Time Limits
 	public final double armRaiseTimeMilli = 5000;
@@ -41,7 +42,7 @@ public class OPModeConstants {
 
 	public enum GoldLocation{
 		LEFT,
-		MIDDLE,
+		CENTER,
 		RIGHT,
 		UNKNOWN
 	}

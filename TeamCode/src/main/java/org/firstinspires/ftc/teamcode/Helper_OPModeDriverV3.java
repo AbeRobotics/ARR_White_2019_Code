@@ -93,8 +93,8 @@ public class Helper_OPModeDriverV3 {
 		rightWheel.setTargetPosition((int)totalTicks);
 
 		while((rightWheel.isBusy() || leftWheel.isBusy()) && opMode.isStopRequested() == false) {
-			rightWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(rightWheel.getCurrentPosition())), Math.sqrt(Math.abs(rightWheel.getCurrentPosition() + opModeConstants.gyroErrorThreshold))), 0.1, 1));
-			leftWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(leftWheel.getCurrentPosition())), Math.sqrt(Math.abs(leftWheel.getCurrentPosition() + opModeConstants.gyroErrorThreshold))), 0.1, 1));
+			rightWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(rightWheel.getCurrentPosition())), Math.sqrt(Math.abs(rightWheel.getCurrentPosition() + opModeConstants.gyroErrorThreshold))), 0.15, 1));
+			leftWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(leftWheel.getCurrentPosition())), Math.sqrt(Math.abs(leftWheel.getCurrentPosition() + opModeConstants.gyroErrorThreshold))), 0.15, 1));
 
 			telemetry.addData("Left Current Position -",leftWheel.getCurrentPosition());
 			telemetry.addData("Right Current Position -",rightWheel.getCurrentPosition());
@@ -106,29 +106,6 @@ public class Helper_OPModeDriverV3 {
 		resetDriveEncoders();
 		return true;
 	}
-
-    // Turns the robot *THE GYROSCOPE DOESN'T WORK, DO NOT USE*
-    public boolean gyroTurn(OPModeConstants.TurnDirection direction, OPModeConstants.AutonomousSpeed speed, double angle) {
-    	setAllStop();
-    	resetDriveEncoders();
-    	
-    	setTurnDirection(direction);
-    	while(angle > 360) {angle -= 360;}
-    	while(angle < 0) {angle += 360;}
-    	
-    	leftWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    	rightWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    	
-    	OPModeGyroHelper gyroHelper = new OPModeGyroHelper();
-    	while(!onHeading(angle, gyroHelper) && opMode.isStopRequested() == false) {
-    		leftWheel.setPower(getPower(speed));
-            rightWheel.setPower(getPower(speed));
-    	}
-    	
-    	setAllStop();
-    	resetDriveEncoders();
-    	return true;
-    }
     
     // Checks if robot is facing an angle
     private boolean onHeading(double targetAngle, OPModeGyroHelper gyroHelper) {
