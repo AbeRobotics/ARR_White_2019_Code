@@ -99,7 +99,7 @@ public class Abe_Autonomous_Left extends LinearOpMode{
 
         sleep(500);
 
-        driveHelper.drive(92.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
+        driveHelper.drive(80.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
 
         requestOpModeStop();
     }
