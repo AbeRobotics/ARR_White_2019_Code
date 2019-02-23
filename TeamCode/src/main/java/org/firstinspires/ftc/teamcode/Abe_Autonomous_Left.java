@@ -33,9 +33,11 @@ public class Abe_Autonomous_Left extends LinearOpMode{
             sleep(10);
         }
 
-/*      Only needed if the robot starts backwards.
+        sleep(500);
+
+//      Only needed if the robot starts backwards.
         driveHelper.driveTurn(OPModeConstants.TurnDirection.RIGHT, OPModeConstants.AutonomousSpeed.LOW, 180);
-*/
+
         Task_FindGold findGold = new Task_FindGold(this, hardwareMap, opModeConstants, elapsedTime);
         findGold.init();
         findGold.performTask();
