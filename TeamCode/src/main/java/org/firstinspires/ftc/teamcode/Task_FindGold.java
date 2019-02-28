@@ -73,21 +73,25 @@ public class Task_FindGold extends IOPModeTaskBase {
                         int silverMineral2X = -1;
                         for (Recognition recognition : updatedRecognitions) {
                             if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                goldMineralX = (int) recognition.getLeft();
+                                goldMineralX = (int) recognition.getTop();
                             } else if (silverMineral1X == -1) {
-                                silverMineral1X = (int) recognition.getLeft();
+                                silverMineral1X = (int) recognition.getTop();
                             } else {
-                                silverMineral2X = (int) recognition.getLeft();
+                                silverMineral2X = (int) recognition.getTop();
                             }
                         }
                         if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+
                             if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
                                 opMode.telemetry.addData("Gold Mineral Position", "Left");
                                 opModeConstants.setGoldLocation(OPModeConstants.GoldLocation.LEFT);
+
                             } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                                 opMode.telemetry.addData("Gold Mineral Position", "Right");
                                 opModeConstants.setGoldLocation(OPModeConstants.GoldLocation.RIGHT);
-                            } else if((silverMineral1X < goldMineralX  && goldMineralX < silverMineral2X) || (silverMineral2X < goldMineralX && goldMineralX < silverMineral1X)){
+                            }
+
+                            else if((silverMineral1X < goldMineralX && goldMineralX < silverMineral2X) || (silverMineral2X < goldMineralX && goldMineralX < silverMineral1X)){
                                 opMode.telemetry.addData("Gold Mineral Position", "Center");
                                 opModeConstants.setGoldLocation(OPModeConstants.GoldLocation.CENTER);
                             }
