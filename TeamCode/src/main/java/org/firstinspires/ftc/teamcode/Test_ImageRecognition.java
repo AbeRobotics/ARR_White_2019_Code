@@ -27,7 +27,7 @@ public class Test_ImageRecognition extends LinearOpMode{
 
         telemetry.addData("Gold position", opModeConstants.getGoldLocation());
         telemetry.update();
-        sleep(10000);
+        sleep(2000);
     }
 
 }

@@ -25,14 +25,14 @@ public class Abe_Autonomous_Right extends LinearOpMode{
         telemetry.setAutoClear(false);
         telemetry.addData("Status", "Running");
         telemetry.update();
-
+/*
         Task_RaiseArm raiseArm = new Task_RaiseArm(hardwareMap, this, opModeConstants, elapsedTime);
         raiseArm.init();
         raiseArm.performTask();
         while (raiseArm.getTaskStatus() == false && !isStopRequested()){
             sleep(10);
         }
-
+*/
 /*      Only needed if the robot starts backwards.
         driveHelper.driveTurn(OPModeConstants.TurnDirection.RIGHT, OPModeConstants.AutonomousSpeed.LOW, 180);
 */

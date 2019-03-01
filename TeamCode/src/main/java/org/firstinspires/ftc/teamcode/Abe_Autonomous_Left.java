@@ -25,17 +25,14 @@ public class Abe_Autonomous_Left extends LinearOpMode{
         telemetry.setAutoClear(false);
         telemetry.addData("Status", "Running");
         telemetry.update();
-
+/*
         Task_RaiseArm raiseArm = new Task_RaiseArm(hardwareMap, this, opModeConstants, elapsedTime);
         raiseArm.init();
         raiseArm.performTask();
         while (raiseArm.getTaskStatus() == false && !isStopRequested()){
             sleep(10);
         }
-
-        sleep(500);
-
-//      Only needed if the robot starts backwards.
+        
         driveHelper.driveTurn(OPModeConstants.TurnDirection.RIGHT, OPModeConstants.AutonomousSpeed.LOW, 180);
 
         Task_FindGold findGold = new Task_FindGold(this, hardwareMap, opModeConstants, elapsedTime);
@@ -97,9 +94,11 @@ public class Abe_Autonomous_Left extends LinearOpMode{
             sleep(10);
         }
 
-        driveHelper.driveTurn(OPModeConstants.TurnDirection.RIGHT, OPModeConstants.AutonomousSpeed.LOW, 90);
+        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 90);
 
-        driveHelper.drive(92.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.REVERSE);
+        sleep(500);
+
+        driveHelper.drive(80.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
 
         requestOpModeStop();
     }
