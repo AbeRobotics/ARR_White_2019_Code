@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
- * Created by Kyle Stang on 22-Feb-2019
+ * Created by Kyle Stang on 1-Mar-2019
  */
-public class Task_DropFlag extends IOPModeTaskBase {
+public class Task_ArmBrake extends IOPModeTaskBase {
 
     private LinearOpMode opMode;
     private HardwareMap hardwareMap;
@@ -16,9 +16,9 @@ public class Task_DropFlag extends IOPModeTaskBase {
     private OPModeConstants opModeConstants;
 
     private boolean taskComplete;
-    private Servo flagHolder;
+    private Servo armBrake;
 
-    public Task_DropFlag(LinearOpMode opMode, HardwareMap hardwareMap, ElapsedTime elapsedTime, OPModeConstants opModeConstants){
+    public Task_ArmBrake(LinearOpMode opMode, HardwareMap hardwareMap, ElapsedTime elapsedTime, OPModeConstants opModeConstants){
         this.opMode = opMode;
         this.hardwareMap = hardwareMap;
         this.elapsedTime = elapsedTime;
@@ -28,33 +28,33 @@ public class Task_DropFlag extends IOPModeTaskBase {
     @Override
     public void init() {
         taskComplete = false;
-        flagHolder = hardwareMap.servo.get("flag_holder");
+        armBrake = hardwareMap.servo.get("arm_brake");
     }
-
+    //TODO make sure it stops after reaching position (may need to add onPosition() method)
     @Override
-    public void performTask(){
+    public void performTask() {
         double startTime = elapsedTime.milliseconds();
-        while(taskComplete == false && !opMode.isStopRequested()) {
-            if (elapsedTime.milliseconds() > startTime + opModeConstants.dropFlagTimeMilli) {
+        while(taskComplete == false && !opMode.isStopRequested()){
+            if(elapsedTime.milliseconds() > startTime + opModeConstants.armBrakeTimeMilli){
                 opMode.telemetry.addData("status", "timeout");
                 opMode.telemetry.update();
                 taskComplete = true;
                 break;
             }
-            flagHolder.setPosition(1);
-            if (flagHolder.getPosition() == 1) {
+            armBrake.setPosition(opModeConstants.armBrakePosition);
+            if(armBrake.getPosition() == opModeConstants.armBrakePosition){
                 taskComplete = true;
             }
         }
     }
 
     @Override
-    public boolean getTaskStatus(){
+    public boolean getTaskStatus() {
         return taskComplete;
     }
 
     @Override
-    public void reset(){
+    public void reset() {
         taskComplete = false;
     }
 }

@@ -64,8 +64,8 @@ public class Helper_OPModeDriverV3 {
         rightWheel.setTargetPosition((int)totalTicks);
 
 		while((rightWheel.isBusy() || leftWheel.isBusy()) && opMode.isStopRequested() == false && !onPosition(totalTicks, rightWheel) && ! onPosition(totalTicks, leftWheel)) {
-			rightWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(rightWheel.getCurrentPosition())), Math.sqrt(Math.abs(rightWheel.getCurrentPosition() + opModeConstants.gyroErrorThreshold))), 0.1, 1));
-			leftWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(leftWheel.getCurrentPosition())), Math.sqrt(Math.abs(leftWheel.getCurrentPosition() + opModeConstants.gyroErrorThreshold))), 0.1, 1));
+			rightWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(rightWheel.getCurrentPosition())), Math.sqrt(Math.abs(rightWheel.getCurrentPosition() + opModeConstants.driveErrorThreshold))), 0.1, 1));
+			leftWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(leftWheel.getCurrentPosition())), Math.sqrt(Math.abs(leftWheel.getCurrentPosition() + opModeConstants.driveErrorThreshold))), 0.1, 1));
 
 
 			telemetry.addData("Left Current Position -",leftWheel.getCurrentPosition());
@@ -95,8 +95,8 @@ public class Helper_OPModeDriverV3 {
 		rightWheel.setTargetPosition((int)totalTicks);
 
 		while((rightWheel.isBusy() || leftWheel.isBusy()) && opMode.isStopRequested() == false && !onPosition(totalTicks, rightWheel) && ! onPosition(totalTicks, leftWheel)) {
-			rightWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(rightWheel.getCurrentPosition())), Math.sqrt(Math.abs(rightWheel.getCurrentPosition() + opModeConstants.gyroErrorThreshold))), 0.15, 1));
-			leftWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(leftWheel.getCurrentPosition())), Math.sqrt(Math.abs(leftWheel.getCurrentPosition() + opModeConstants.gyroErrorThreshold))), 0.15, 1));
+			rightWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(rightWheel.getCurrentPosition())), Math.sqrt(Math.abs(rightWheel.getCurrentPosition() + opModeConstants.driveErrorThreshold))), 0.15, 1));
+			leftWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(leftWheel.getCurrentPosition())), Math.sqrt(Math.abs(leftWheel.getCurrentPosition() + opModeConstants.driveErrorThreshold))), 0.15, 1));
 
 			telemetry.addData("Left Current Position -",leftWheel.getCurrentPosition());
 			telemetry.addData("Right Current Position -",rightWheel.getCurrentPosition());
@@ -116,17 +116,6 @@ public class Helper_OPModeDriverV3 {
 		}
 		return on;
 	}
-    
-    // Checks if robot is facing an angle
-    private boolean onHeading(double targetAngle, OPModeGyroHelper gyroHelper) {
-    	boolean onTarget = false;
-    	
-    	double DegreesOffTarget = Math.abs(targetAngle - gyroHelper.getGyroAngle(telemetry, hardwareMap));
-    	if(DegreesOffTarget < opModeConstants.gyroErrorThreshold) {
-    		onTarget = true;
-    	}
-    	return onTarget;
-    }
 
     // Returns power for wheels
 	private double getPower(OPModeConstants.AutonomousSpeed speed) {

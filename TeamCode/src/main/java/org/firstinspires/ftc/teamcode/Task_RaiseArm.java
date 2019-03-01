@@ -17,7 +17,7 @@ public class Task_RaiseArm extends IOPModeTaskBase {
     private LinearOpMode opMode;
     private ElapsedTime elapsedTime;
 
-    public Task_RaiseArm(HardwareMap hardwareMap, LinearOpMode opMode, OPModeConstants opModeConstants, ElapsedTime elapsedTime){
+    public Task_RaiseArm(LinearOpMode opMode, HardwareMap hardwareMap, ElapsedTime elapsedTime, OPModeConstants opModeConstants){
         this.armMotor = hardwareMap.get(DcMotor.class, "arm");
         this.opMode = opMode;
         this.opModeConstants = opModeConstants;
@@ -27,6 +27,33 @@ public class Task_RaiseArm extends IOPModeTaskBase {
     @Override
     public void init(){
         this.taskComplete = false;
+        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    @Override
+    public void performTask(){
+        double startTime = elapsedTime.milliseconds();
+
+        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armMotor.setTargetPosition((int)opModeConstants.armRaiseTicks);
+        armMotor.setPower(-0.2);
+
+        while(!opMode.isStopRequested() && !taskComplete){
+            if (elapsedTime.milliseconds() > startTime + opModeConstants.armRaiseTimeMilli) {
+                opMode.telemetry.addData("status", "timeout");
+                opMode.telemetry.update();
+                taskComplete = true;
+                break;
+            }
+            if(armMotor.isBusy()){
+                opMode.telemetry.addData("Arm position", armMotor.getCurrentPosition());
+                opMode.telemetry.update();
+                sleep(10);
+            }
+            else{
+                taskComplete = true;
+            }
+        }
     }
 
     @Override
@@ -35,26 +62,8 @@ public class Task_RaiseArm extends IOPModeTaskBase {
     }
 
     @Override
-    public void performTask(){
-        double startTime = elapsedTime.milliseconds();
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor.setTargetPosition((int)opModeConstants.armRaiseTicks);
-        armMotor.setPower(-0.2);
-
-        while(!opMode.isStopRequested() && !taskComplete && elapsedTime.milliseconds() < startTime + opModeConstants.armRaiseTimeMilli){
-            if(!armMotor.isBusy()){
-                opMode.telemetry.addData("Arm position", armMotor.getCurrentPosition());
-                opMode.telemetry.update();
-            }
-            sleep(10);
-        }
-        taskComplete = true;
-
-    }
-
-    @Override
     public void reset(){
         taskComplete = false;
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 }

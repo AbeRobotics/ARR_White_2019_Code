@@ -10,15 +10,18 @@ public class OPModeConstants {
 	public final double ticksPerInch = 91.6732d;
 	public final double gyroErrorThreshold = 3.0d;
 	public final double degreesToInch = 0.13308135546d * 1.075;
-	public final double driveErrorThreshold = 10d;
+	public final double driveErrorThreshold = 3d;
 	public final double slowdownMultiplier = 0.03d;
 	public final double armRaiseTicks = 5700d;
 	public final double mineralAngleDegrees = 24.376d;
+	//TODO Find arm brake position
+	public final double armBrakePosition = -1d;
 
 	//Time Limits
 	public final double armRaiseTimeMilli = 3000;
 	public final double findGoldTimeMilli = 5000;
 	public final double dropFlagTimeMilli = 2000;
+	public final double armBrakeTimeMilli = 1000;
 	public final double moveGoldTimeMilli = 10000;
 	
 	// Enumerations

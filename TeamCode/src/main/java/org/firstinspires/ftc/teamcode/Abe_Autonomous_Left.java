@@ -25,8 +25,8 @@ public class Abe_Autonomous_Left extends LinearOpMode{
         telemetry.setAutoClear(false);
         telemetry.addData("Status", "Running");
         telemetry.update();
-/*
-        Task_RaiseArm raiseArm = new Task_RaiseArm(hardwareMap, this, opModeConstants, elapsedTime);
+
+        Task_RaiseArm raiseArm = new Task_RaiseArm(this, hardwareMap, elapsedTime, opModeConstants);
         raiseArm.init();
         raiseArm.performTask();
         while (raiseArm.getTaskStatus() == false && !isStopRequested()){

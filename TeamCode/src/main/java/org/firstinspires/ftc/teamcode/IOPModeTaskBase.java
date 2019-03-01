@@ -7,8 +7,8 @@ package org.firstinspires.ftc.teamcode;
 
 public abstract class IOPModeTaskBase {
     public abstract void init();
-    public abstract boolean getTaskStatus();
     public abstract void performTask();
+    public abstract boolean getTaskStatus();
     public abstract void reset();
     public final void sleep(long milliseconds) {
         try {
@@ -16,9 +16,5 @@ public abstract class IOPModeTaskBase {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-    }
-    public void log (String key, String value)
-    {
-        //todo - Implement call to telemetery so our implementers can easily log whats going on
     }
 }

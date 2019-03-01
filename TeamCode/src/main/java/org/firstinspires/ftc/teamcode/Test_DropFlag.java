@@ -4,12 +4,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+/**
+ * Created by Kyle Stang on 21-Feb-2019
+ */
 @Autonomous(name="Drop Flag Test", group="Autonomous Tests")
 public class Test_DropFlag extends LinearOpMode{
 
     private ElapsedTime elapsedTime = new ElapsedTime();
-    private Task_DropFlag dropFlag;
     private OPModeConstants opModeConstants = OPModeConstants.getInstance();
+
+    private Task_DropFlag dropFlag;
 
     @Override
     public void runOpMode() {
