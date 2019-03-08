@@ -16,89 +16,104 @@ public class Abe_Autonomous_Left extends LinearOpMode{
 
     @Override
     public void runOpMode(){
-        waitForStart();
+
         elapsedTime = new ElapsedTime();
         opModeConstants = OPModeConstants.getInstance();
         driveHelper = Helper_OPModeDriverV3.getInstance();
+
         driveHelper.init(telemetry, hardwareMap, opModeConstants, this);
-        elapsedTime.reset();
         telemetry.setAutoClear(false);
+
+        // Create tasks
+        Task_ArmRelease armRelease = new Task_ArmRelease(this, hardwareMap, elapsedTime, opModeConstants);
+        Task_RaiseArm raiseArm = new Task_RaiseArm(this, hardwareMap, elapsedTime, opModeConstants);
+        Task_FindGold findGold = new Task_FindGold(this, hardwareMap, opModeConstants, elapsedTime);
+        Task_DropFlag dropFlag = new Task_DropFlag(this, hardwareMap, elapsedTime, opModeConstants);
+        Task_MoveCenterGold moveCenterGold = new Task_MoveCenterGold(this, hardwareMap, elapsedTime, opModeConstants, driveHelper);
+        Task_MoveLeftGold moveLeftGold = new Task_MoveLeftGold(this, hardwareMap, elapsedTime, opModeConstants, driveHelper);
+        Task_MoveRightGold moveRightGold = new Task_MoveRightGold(this, hardwareMap, elapsedTime, opModeConstants, driveHelper);
+
+        waitForStart();
+
+        elapsedTime.reset();
+
         telemetry.addData("Status", "Running");
         telemetry.update();
 
-        Task_RaiseArm raiseArm = new Task_RaiseArm(this, hardwareMap, elapsedTime, opModeConstants);
+        // Start of game actions
+        // Release brake
+        armRelease.init();
+        armRelease.performTask();
+        while (armRelease.getTaskStatus() == false){
+            sleep(10);
+        }
+
+        sleep(opModeConstants.restTimeMilli);
+
+        // Lower robot
         raiseArm.init();
         raiseArm.performTask();
-        while (raiseArm.getTaskStatus() == false && !isStopRequested()){
-            sleep(10);
+        while (raiseArm.getTaskStatus() == false){
+            sleep(5);
         }
-        
-        driveHelper.driveTurn(OPModeConstants.TurnDirection.RIGHT, OPModeConstants.AutonomousSpeed.LOW, 180);
 
-        Task_FindGold findGold = new Task_FindGold(this, hardwareMap, opModeConstants, elapsedTime);
+        sleep(opModeConstants.restTimeMilli);
+
+        // Make robot face forward
+        driveHelper.driveTurn(OPModeConstants.TurnDirection.RIGHT, OPModeConstants.AutonomousSpeed.LOW, 180.0);
+
+        sleep(opModeConstants.restTimeMilli);
+
+        // Find gold block
         findGold.init();
         findGold.performTask();
-        while (findGold.getTaskStatus() == false && !isStopRequested()){
+        while (findGold.getTaskStatus() == false){
             sleep(10);
         }
 
-        if(opModeConstants.getGoldLocation() == OPModeConstants.GoldLocation.RIGHT){
-            Task_MoveRightGold moveRightGold = new Task_MoveRightGold(this, hardwareMap, driveHelper, elapsedTime, opModeConstants);
-            moveRightGold.init();
-            moveRightGold.performTask();
-            while (moveRightGold.getTaskStatus() == false && !isStopRequested()){
-                sleep(10);
-            }
-        }
-
-        else if(opModeConstants.getGoldLocation() == OPModeConstants.GoldLocation.LEFT){
-            Task_MoveLeftGold moveLeftGold = new Task_MoveLeftGold(this, hardwareMap, driveHelper, elapsedTime, opModeConstants);
-            moveLeftGold.init();
-            moveLeftGold.performTask();
-            while (moveLeftGold.getTaskStatus() == false && !isStopRequested()){
-                sleep(10);
-            }
-        }
-
-        else if(opModeConstants.getGoldLocation() == OPModeConstants.GoldLocation.CENTER){
-            Task_MoveCenterGold moveCenterGold = new Task_MoveCenterGold(this, hardwareMap, driveHelper, elapsedTime, opModeConstants);
+        // Move gold block
+        if(opModeConstants.getGoldLocation() == OPModeConstants.GoldLocation.CENTER){
             moveCenterGold.init();
             moveCenterGold.performTask();
-            while (moveCenterGold.getTaskStatus() == false && !isStopRequested()){
+            while (moveCenterGold.getTaskStatus() == false){
+                sleep(10);
+            }
+        }
+        else if(opModeConstants.getGoldLocation() == OPModeConstants.GoldLocation.LEFT){
+            moveLeftGold.init();
+            moveLeftGold.performTask();
+            while (moveLeftGold.getTaskStatus() == false){
+                sleep(10);
+            }
+        }
+        else if(opModeConstants.getGoldLocation() == OPModeConstants.GoldLocation.RIGHT){
+            moveRightGold.init();
+            moveRightGold.performTask();
+            while (moveRightGold.getTaskStatus() == false){
                 sleep(10);
             }
         }
 
-        sleep(500);
+        sleep(opModeConstants.restTimeMilli);
 
-        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 40.0);
+        // Drive to depot
+        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 45.0);
+        sleep(opModeConstants.restTimeMilli);
+        driveHelper.drive(52.5, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
+        sleep(opModeConstants.restTimeMilli);
+        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 90.0);
+        sleep(opModeConstants.restTimeMilli);
+        driveHelper.drive(60.5, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
 
-        sleep(500);
-
-        driveHelper.drive(45.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
-
-        sleep(500);
-
-        driveHelper.driveTurn(OPModeConstants.TurnDirection.RIGHT, OPModeConstants.AutonomousSpeed.LOW, 90.0);
-
-        sleep(500);
-
-        driveHelper.drive(50.92, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
-
-        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 90);
-
-        Task_DropFlag dropFlag = new Task_DropFlag(this, hardwareMap, elapsedTime, opModeConstants);
+        // Drop flag
         dropFlag.init();
         dropFlag.performTask();
-        while (dropFlag.getTaskStatus() == false && !isStopRequested()){
+        while (dropFlag.getTaskStatus() == false){
             sleep(10);
         }
 
-        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 90);
-
-        sleep(500);
-
-        driveHelper.drive(80.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
+        // Drive to crater
+        driveHelper.drive(76.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.REVERSE);
 
         requestOpModeStop();
     }

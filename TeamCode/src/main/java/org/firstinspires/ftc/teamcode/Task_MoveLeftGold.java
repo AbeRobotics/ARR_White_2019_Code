@@ -16,7 +16,7 @@ public class Task_MoveLeftGold extends IOPModeTaskBase {
     private ElapsedTime elapsedTime;
     private OPModeConstants opModeConstants;
 
-    public Task_MoveLeftGold(LinearOpMode opMode, HardwareMap hardwareMap, Helper_OPModeDriverV3 driveHelper, ElapsedTime elapsedTime, OPModeConstants opModeConstants){
+    public Task_MoveLeftGold(LinearOpMode opMode, HardwareMap hardwareMap, ElapsedTime elapsedTime, OPModeConstants opModeConstants, Helper_OPModeDriverV3 driveHelper){
         this.opMode = opMode;
         this.hardwareMap = hardwareMap;
         this.driveHelper = driveHelper;
@@ -31,23 +31,21 @@ public class Task_MoveLeftGold extends IOPModeTaskBase {
 
     @Override
     public void performTask(){
-
         driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, opModeConstants.mineralAngleDegrees);
 
-        sleep(500);
+        sleep(opModeConstants.restTimeMilli);
 
-        driveHelper.drive(36.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
+        driveHelper.drive(38.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
 
-        sleep(500);
+        sleep(opModeConstants.restTimeMilli);
 
-        driveHelper.drive(36.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.REVERSE);
+        driveHelper.drive(38.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.REVERSE);
 
-        sleep(500);
+        sleep(opModeConstants.restTimeMilli);
 
         driveHelper.driveTurn(OPModeConstants.TurnDirection.RIGHT, OPModeConstants.AutonomousSpeed.LOW, opModeConstants.mineralAngleDegrees);
 
         taskComplete = true;
-
     }
 
     @Override

@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by Kyle Stang on 14-Feb-2019
  * Adapted from Akanksha Joshi
  */
-public class Task_LowerArm extends IOPModeTaskBase {
+public class LowerArmWithEncoder extends IOPModeTaskBase {
 
     private DcMotor armMotor;
     private boolean taskComplete;
@@ -17,7 +17,7 @@ public class Task_LowerArm extends IOPModeTaskBase {
     private LinearOpMode opMode;
     private ElapsedTime elapsedTime;
 
-    public Task_LowerArm(LinearOpMode opMode, HardwareMap hardwareMap, ElapsedTime elapsedTime, OPModeConstants opModeConstants){
+    public LowerArmWithEncoder(LinearOpMode opMode, HardwareMap hardwareMap, ElapsedTime elapsedTime, OPModeConstants opModeConstants){
         this.armMotor = hardwareMap.get(DcMotor.class, "arm");
         this.opMode = opMode;
         this.opModeConstants = opModeConstants;

@@ -30,7 +30,7 @@ public class Task_ArmBrake extends IOPModeTaskBase {
         taskComplete = false;
         armBrake = hardwareMap.servo.get("arm_brake");
     }
-    //TODO make sure it stops after reaching position (may need to add onPosition() method)
+
     @Override
     public void performTask() {
         double startTime = elapsedTime.milliseconds();

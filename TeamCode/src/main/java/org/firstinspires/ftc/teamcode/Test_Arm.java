@@ -14,15 +14,14 @@ public class Test_Arm extends LinearOpMode {
     private OPModeConstants opModeConstants = OPModeConstants.getInstance();
 
     private Task_ArmRelease armRelease;
-    private Task_RaiseNoEncoder raiseArm;
-    private Task_LowerArm lowerArm;
+    private Task_RaiseArm raiseArm;
+    private LowerArmWithEncoder lowerArm;
     private Task_ArmBrake armBrake;
 
     @Override
     public void runOpMode(){
         armRelease = new Task_ArmRelease(this, hardwareMap, elapsedTime, opModeConstants);
-        raiseArm = new Task_RaiseNoEncoder(this, hardwareMap, elapsedTime, opModeConstants);
-        lowerArm = new Task_LowerArm(this, hardwareMap, elapsedTime, opModeConstants);
+        raiseArm = new Task_RaiseArm(this, hardwareMap, elapsedTime, opModeConstants);
         armBrake = new Task_ArmBrake(this, hardwareMap, elapsedTime, opModeConstants);
 
         waitForStart();

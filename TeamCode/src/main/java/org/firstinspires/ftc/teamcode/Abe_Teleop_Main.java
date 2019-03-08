@@ -17,10 +17,9 @@ public class Abe_Teleop_Main extends LinearOpMode {
 	private double SPEED_MULTIPLIER = 0.75;
 	private  double ARM_MULTIPLIER = 0.3;
     // Sets how quickly the power to the wheels changes as a percent of the difference goal speed and current speed (max 1)
-	private double ACCELERATION_MULTIPLIER = (0.5);
+	private double ACCELERATION_MULTIPLIER = 0.5;
 
     // Declare OpMode members.
-    private OPModeConstants opModeConstants = OPModeConstants.getInstance();
     private ElapsedTime elapsedTime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
@@ -92,11 +91,11 @@ public class Abe_Teleop_Main extends LinearOpMode {
             rightPower = rightPower + ((goalRightPower - rightPower) * ACCELERATION_MULTIPLIER);
 
             if(gamepad1.dpad_up){
-                armBrake.setPosition(opModeConstants.armBrakePosition);
+                armBrake.setPosition(0.85);
             }
 
             if(gamepad1.dpad_down){
-                armBrake.setPosition(0);
+                armBrake.setPosition(1);
             }
 
             if(gamepad1.b){
@@ -123,7 +122,6 @@ public class Abe_Teleop_Main extends LinearOpMode {
             		leftPower, rightPower, goalLeftPower, goalRightPower);
             telemetry.addData("Right encoder", rightDrive.getCurrentPosition());
             telemetry.addData("Left encoder", leftDrive.getCurrentPosition());
-            telemetry.addData("arm encoder", armDrive.getCurrentPosition());
             telemetry.update();
         }
     }
