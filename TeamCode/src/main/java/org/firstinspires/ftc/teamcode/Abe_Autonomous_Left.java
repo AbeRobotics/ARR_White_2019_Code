@@ -59,6 +59,10 @@ public class Abe_Autonomous_Left extends LinearOpMode{
 
         sleep(opModeConstants.restTimeMilli);
 
+        driveHelper.drive(4.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.REVERSE);
+
+        sleep(opModeConstants.restTimeMilli);
+
         // Make robot face forward
         driveHelper.driveTurn(OPModeConstants.TurnDirection.RIGHT, OPModeConstants.AutonomousSpeed.LOW, 180.0);
 

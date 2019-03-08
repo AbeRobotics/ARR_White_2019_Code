@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -17,6 +18,7 @@ public class Task_ArmRelease extends IOPModeTaskBase {
 
     private boolean taskComplete;
     private Servo armBrake;
+    private DcMotor armMotor;
 
     public Task_ArmRelease(LinearOpMode opMode, HardwareMap hardwareMap, ElapsedTime elapsedTime, OPModeConstants opModeConstants){
         this.opMode = opMode;
@@ -29,6 +31,7 @@ public class Task_ArmRelease extends IOPModeTaskBase {
     public void init() {
         taskComplete = false;
         armBrake = hardwareMap.servo.get("arm_brake");
+        armMotor = hardwareMap.dcMotor.get("arm");
     }
 
     @Override
@@ -38,11 +41,14 @@ public class Task_ArmRelease extends IOPModeTaskBase {
             if(elapsedTime.milliseconds() > startTime + opModeConstants.armBrakeTimeMilli){
                 opMode.telemetry.addData("status", "timeout");
                 opMode.telemetry.update();
+                armMotor.setPower(0);
                 taskComplete = true;
                 break;
             }
+            armMotor.setPower(-0.5);
             armBrake.setPosition(1);
             if(armBrake.getPosition() == 1){
+                armMotor.setPower(0);
                 taskComplete = true;
             }
         }
@@ -58,3 +64,17 @@ public class Task_ArmRelease extends IOPModeTaskBase {
         taskComplete = false;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+//oof
