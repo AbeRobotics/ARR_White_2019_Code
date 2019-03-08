@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -12,6 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Task_RaiseNoEncoder extends IOPModeTaskBase {
 
     private DcMotor armMotor;
+    private TouchSensor armButton;
     private boolean taskComplete;
     private OPModeConstants opModeConstants;
     private LinearOpMode opMode;
@@ -19,6 +21,7 @@ public class Task_RaiseNoEncoder extends IOPModeTaskBase {
 
     public Task_RaiseNoEncoder(LinearOpMode opMode, HardwareMap hardwareMap, ElapsedTime elapsedTime, OPModeConstants opModeConstants){
         this.armMotor = hardwareMap.get(DcMotor.class, "arm");
+        this.armButton = hardwareMap.get(TouchSensor.class, "button");
         this.opMode = opMode;
         this.opModeConstants = opModeConstants;
         this.elapsedTime = elapsedTime;
@@ -38,18 +41,22 @@ public class Task_RaiseNoEncoder extends IOPModeTaskBase {
 
         while(!opMode.isStopRequested() && !taskComplete){
             if (elapsedTime.milliseconds() > startTime + opModeConstants.armRaiseTimeMilli) {
+                armMotor.setPower(0);
                 opMode.telemetry.addData("status", "timeout");
                 opMode.telemetry.update();
                 taskComplete = true;
                 break;
             }
-            if(armMotor.isBusy()){
-                opMode.telemetry.addData("Arm position", armMotor.getCurrentPosition());
+            if(armButton.isPressed()){
+                armMotor.setPower(0);
+                opMode.telemetry.addData("Raise status", "done");
                 opMode.telemetry.update();
-                sleep(10);
+                taskComplete = true;
+                break;
             }
             else{
-                taskComplete = true;
+                armMotor.setPower(0.2);
+                sleep(5);
             }
         }
     }
@@ -62,6 +69,5 @@ public class Task_RaiseNoEncoder extends IOPModeTaskBase {
     @Override
     public void reset(){
         taskComplete = false;
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 }

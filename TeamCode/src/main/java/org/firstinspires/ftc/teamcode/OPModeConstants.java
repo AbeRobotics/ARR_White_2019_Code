@@ -15,10 +15,10 @@ public class OPModeConstants {
 	public final double armRaiseTicks = 5700d;
 	public final double mineralAngleDegrees = 24.376d;
 	//TODO Find arm brake position
-	public final double armBrakePosition = -1d;
+	public final double armBrakePosition = 0.85d;
 
 	//Time Limits
-	public final double armRaiseTimeMilli = 3000;
+	public final double armRaiseTimeMilli = 10000;
 	public final double findGoldTimeMilli = 5000;
 	public final double dropFlagTimeMilli = 2000;
 	public final double armBrakeTimeMilli = 1000;

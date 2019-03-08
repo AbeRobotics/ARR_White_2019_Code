@@ -41,8 +41,8 @@ public class Task_ArmRelease extends IOPModeTaskBase {
                 taskComplete = true;
                 break;
             }
-            armBrake.setPosition(0);
-            if(armBrake.getPosition() == 0){
+            armBrake.setPosition(1);
+            if(armBrake.getPosition() == 1){
                 taskComplete = true;
             }
         }
