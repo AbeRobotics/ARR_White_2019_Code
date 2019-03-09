@@ -16,7 +16,7 @@ public class Task_MoveCenterGold extends IOPModeTaskBase {
     private ElapsedTime elapsedTime;
     private OPModeConstants opModeConstants;
 
-    public Task_MoveCenterGold(LinearOpMode opMode, HardwareMap hardwareMap, Helper_OPModeDriverV3 driveHelper, ElapsedTime elapsedTime, OPModeConstants opModeConstants){
+    public Task_MoveCenterGold(LinearOpMode opMode, HardwareMap hardwareMap, ElapsedTime elapsedTime, OPModeConstants opModeConstants, Helper_OPModeDriverV3 driveHelper){
         this.opMode = opMode;
         this.hardwareMap = hardwareMap;
         this.driveHelper = driveHelper;
@@ -31,9 +31,11 @@ public class Task_MoveCenterGold extends IOPModeTaskBase {
 
     @Override
     public void performTask(){
-        driveHelper.drive(33.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
+        driveHelper.drive(35.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
 
-        driveHelper.drive(33.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.REVERSE);
+        sleep(opModeConstants.restTimeMilli);
+
+        driveHelper.drive(35.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.REVERSE);
 
         taskComplete = true;
     }

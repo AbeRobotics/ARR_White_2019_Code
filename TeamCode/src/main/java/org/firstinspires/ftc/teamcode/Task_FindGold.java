@@ -56,7 +56,13 @@ public class Task_FindGold extends IOPModeTaskBase {
         if (tfod != null) {
             tfod.activate();
         }
-        while (!taskComplete && !opMode.isStopRequested() && elapsedTime.milliseconds() < startTime + opModeConstants.findGoldTimeMilli){
+        while (!taskComplete && !opMode.isStopRequested()){
+            if(elapsedTime.milliseconds() > startTime + opModeConstants.findGoldTimeMilli){
+                opMode.telemetry.addData("status", "timeout");
+                opMode.telemetry.update();
+                taskComplete = true;
+                break;
+            }
             if (tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
@@ -69,21 +75,25 @@ public class Task_FindGold extends IOPModeTaskBase {
                         int silverMineral2X = -1;
                         for (Recognition recognition : updatedRecognitions) {
                             if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                goldMineralX = (int) recognition.getLeft();
+                                goldMineralX = (int) recognition.getTop();
                             } else if (silverMineral1X == -1) {
-                                silverMineral1X = (int) recognition.getLeft();
+                                silverMineral1X = (int) recognition.getTop();
                             } else {
-                                silverMineral2X = (int) recognition.getLeft();
+                                silverMineral2X = (int) recognition.getTop();
                             }
                         }
                         if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+
                             if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
                                 opMode.telemetry.addData("Gold Mineral Position", "Left");
                                 opModeConstants.setGoldLocation(OPModeConstants.GoldLocation.LEFT);
-                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+
+                            }
+                            else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                                 opMode.telemetry.addData("Gold Mineral Position", "Right");
                                 opModeConstants.setGoldLocation(OPModeConstants.GoldLocation.RIGHT);
-                            } else {
+                            }
+                            else if((silverMineral1X < goldMineralX && goldMineralX < silverMineral2X) || (silverMineral2X < goldMineralX && goldMineralX < silverMineral1X)){
                                 opMode.telemetry.addData("Gold Mineral Position", "Center");
                                 opModeConstants.setGoldLocation(OPModeConstants.GoldLocation.CENTER);
                             }

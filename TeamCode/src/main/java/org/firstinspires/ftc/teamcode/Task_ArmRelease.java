@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
- * Created by Kyle Stang on 22-Feb-2019
+ * Created by Kyle Stang on 1-Mar-2019
  */
-public class Task_DropFlag extends IOPModeTaskBase {
+public class Task_ArmRelease extends IOPModeTaskBase {
 
     private LinearOpMode opMode;
     private HardwareMap hardwareMap;
@@ -16,9 +17,10 @@ public class Task_DropFlag extends IOPModeTaskBase {
     private OPModeConstants opModeConstants;
 
     private boolean taskComplete;
-    private Servo flagHolder;
+    private Servo armBrake;
+    private DcMotor armMotor;
 
-    public Task_DropFlag(LinearOpMode opMode, HardwareMap hardwareMap, ElapsedTime elapsedTime, OPModeConstants opModeConstants){
+    public Task_ArmRelease(LinearOpMode opMode, HardwareMap hardwareMap, ElapsedTime elapsedTime, OPModeConstants opModeConstants){
         this.opMode = opMode;
         this.hardwareMap = hardwareMap;
         this.elapsedTime = elapsedTime;
@@ -28,33 +30,51 @@ public class Task_DropFlag extends IOPModeTaskBase {
     @Override
     public void init() {
         taskComplete = false;
-        flagHolder = hardwareMap.servo.get("flag_holder");
+        armBrake = hardwareMap.servo.get("arm_brake");
+        armMotor = hardwareMap.dcMotor.get("arm");
     }
 
     @Override
-    public void performTask(){
+    public void performTask() {
         double startTime = elapsedTime.milliseconds();
-        while(taskComplete == false && !opMode.isStopRequested()) {
-            if (elapsedTime.milliseconds() > startTime + opModeConstants.dropFlagTimeMilli) {
+        while(taskComplete == false && !opMode.isStopRequested()){
+            if(elapsedTime.milliseconds() > startTime + opModeConstants.armBrakeTimeMilli){
                 opMode.telemetry.addData("status", "timeout");
                 opMode.telemetry.update();
+                armMotor.setPower(0);
                 taskComplete = true;
                 break;
             }
-            flagHolder.setPosition(0.7);
-            if (flagHolder.getPosition() == 0.7) {
+            armMotor.setPower(-0.75);
+            armBrake.setPosition(1);
+            if(armBrake.getPosition() == 1){
+                armMotor.setPower(0);
                 taskComplete = true;
             }
         }
     }
 
     @Override
-    public boolean getTaskStatus(){
+    public boolean getTaskStatus() {
         return taskComplete;
     }
 
     @Override
-    public void reset(){
+    public void reset() {
         taskComplete = false;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+//oof

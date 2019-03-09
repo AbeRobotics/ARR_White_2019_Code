@@ -4,6 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+/**
+ * Created by Kyle Stang on 20-Feb-2019
+ */
 @Autonomous(name="Image Recognition Test", group="Autonomous Tests")
 public class Test_ImageRecognition extends LinearOpMode{
 
@@ -27,7 +30,7 @@ public class Test_ImageRecognition extends LinearOpMode{
 
         telemetry.addData("Gold position", opModeConstants.getGoldLocation());
         telemetry.update();
-        sleep(10000);
+        sleep(2000);
     }
 
 }

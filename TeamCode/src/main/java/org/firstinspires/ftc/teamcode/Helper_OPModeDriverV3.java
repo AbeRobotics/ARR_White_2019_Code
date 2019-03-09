@@ -38,6 +38,8 @@ public class Helper_OPModeDriverV3 {
 
         leftWheel = hardwareMap.dcMotor.get("left_wheel");
         rightWheel = hardwareMap.dcMotor.get("right_wheel");
+        leftWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+		rightWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     private Helper_OPModeDriverV3(){}
@@ -60,10 +62,10 @@ public class Helper_OPModeDriverV3 {
         rightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftWheel.setTargetPosition((int)totalTicks);
         rightWheel.setTargetPosition((int)totalTicks);
-        
-        while((leftWheel.isBusy() || rightWheel.isBusy()) && opMode.isStopRequested() == false) {
-			rightWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(rightWheel.getCurrentPosition())), Math.sqrt(Math.abs(rightWheel.getCurrentPosition() + opModeConstants.gyroErrorThreshold))), 0.1, 1));
-			leftWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(leftWheel.getCurrentPosition())), Math.sqrt(Math.abs(leftWheel.getCurrentPosition() + opModeConstants.gyroErrorThreshold))), 0.1, 1));
+
+		while((rightWheel.isBusy() || leftWheel.isBusy()) && opMode.isStopRequested() == false && !onPosition(totalTicks, rightWheel) && ! onPosition(totalTicks, leftWheel)) {
+			rightWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(rightWheel.getCurrentPosition())), Math.sqrt(Math.abs(rightWheel.getCurrentPosition() + opModeConstants.driveErrorThreshold))), 0.1, 1));
+			leftWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(leftWheel.getCurrentPosition())), Math.sqrt(Math.abs(leftWheel.getCurrentPosition() + opModeConstants.driveErrorThreshold))), 0.1, 1));
 
 
 			telemetry.addData("Left Current Position -",leftWheel.getCurrentPosition());
@@ -92,9 +94,9 @@ public class Helper_OPModeDriverV3 {
 		leftWheel.setTargetPosition((int)totalTicks);
 		rightWheel.setTargetPosition((int)totalTicks);
 
-		while((rightWheel.isBusy() || leftWheel.isBusy()) && opMode.isStopRequested() == false) {
-			rightWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(rightWheel.getCurrentPosition())), Math.sqrt(Math.abs(rightWheel.getCurrentPosition() + opModeConstants.gyroErrorThreshold))), 0.15, 1));
-			leftWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(leftWheel.getCurrentPosition())), Math.sqrt(Math.abs(leftWheel.getCurrentPosition() + opModeConstants.gyroErrorThreshold))), 0.15, 1));
+		while((rightWheel.isBusy() || leftWheel.isBusy()) && opMode.isStopRequested() == false && !onPosition(totalTicks, rightWheel) && ! onPosition(totalTicks, leftWheel)) {
+			rightWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(rightWheel.getCurrentPosition())), Math.sqrt(Math.abs(rightWheel.getCurrentPosition() + opModeConstants.driveErrorThreshold))), 0.15, 1));
+			leftWheel.setPower(getPower(speed) * Range.clip(opModeConstants.slowdownMultiplier * min(Math.sqrt(Math.abs(totalTicks) - Math.abs(leftWheel.getCurrentPosition())), Math.sqrt(Math.abs(leftWheel.getCurrentPosition() + opModeConstants.driveErrorThreshold))), 0.15, 1));
 
 			telemetry.addData("Left Current Position -",leftWheel.getCurrentPosition());
 			telemetry.addData("Right Current Position -",rightWheel.getCurrentPosition());
@@ -106,17 +108,14 @@ public class Helper_OPModeDriverV3 {
 		resetDriveEncoders();
 		return true;
 	}
-    
-    // Checks if robot is facing an angle
-    private boolean onHeading(double targetAngle, OPModeGyroHelper gyroHelper) {
-    	boolean onTarget = false;
-    	
-    	double DegreesOffTarget = Math.abs(targetAngle - gyroHelper.getGyroAngle(telemetry, hardwareMap));
-    	if(DegreesOffTarget < opModeConstants.gyroErrorThreshold) {
-    		onTarget = true;
-    	}
-    	return onTarget;
-    }
+
+	private boolean onPosition(double target, DcMotor motor){
+    	boolean on = false;
+    	if(Math.abs(motor.getCurrentPosition() - target) < opModeConstants.driveErrorThreshold){
+    		on = true;
+		}
+		return on;
+	}
 
     // Returns power for wheels
 	private double getPower(OPModeConstants.AutonomousSpeed speed) {
