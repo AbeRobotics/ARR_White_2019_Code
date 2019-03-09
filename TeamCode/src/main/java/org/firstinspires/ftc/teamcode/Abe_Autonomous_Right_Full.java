@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 /**
  * Created by Kyle Stang on 22-Feb-2019
  */
-@Autonomous(name="Competition Left", group="Game Opmodes")
-public class Abe_Autonomous_Left extends LinearOpMode{
+@Autonomous(name="Competition Right Full", group="Game Opmodes")
+public class Abe_Autonomous_Right_Full extends LinearOpMode{
 
     private OPModeConstants opModeConstants;
     private ElapsedTime elapsedTime;
@@ -44,7 +44,7 @@ public class Abe_Autonomous_Left extends LinearOpMode{
         // Release brake
         armRelease.init();
         armRelease.performTask();
-        while (armRelease.getTaskStatus() == false){
+        while (armRelease.getTaskStatus() == false && !isStopRequested()){
             sleep(10);
         }
 
@@ -53,7 +53,7 @@ public class Abe_Autonomous_Left extends LinearOpMode{
         // Lower robot
         raiseArm.init();
         raiseArm.performTask();
-        while (raiseArm.getTaskStatus() == false){
+        while (raiseArm.getTaskStatus() == false && !isStopRequested()){
             sleep(5);
         }
 
@@ -64,14 +64,14 @@ public class Abe_Autonomous_Left extends LinearOpMode{
         sleep(opModeConstants.restTimeMilli);
 
         // Make robot face forward
-        driveHelper.driveTurn(OPModeConstants.TurnDirection.RIGHT, OPModeConstants.AutonomousSpeed.LOW, 180.0);
+        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 180.0);
 
         sleep(opModeConstants.restTimeMilli);
 
         // Find gold block
         findGold.init();
         findGold.performTask();
-        while (findGold.getTaskStatus() == false){
+        while (findGold.getTaskStatus() == false && !isStopRequested()){
             sleep(10);
         }
 
@@ -79,21 +79,21 @@ public class Abe_Autonomous_Left extends LinearOpMode{
         if(opModeConstants.getGoldLocation() == OPModeConstants.GoldLocation.CENTER){
             moveCenterGold.init();
             moveCenterGold.performTask();
-            while (moveCenterGold.getTaskStatus() == false){
+            while (moveCenterGold.getTaskStatus() == false && !isStopRequested()){
                 sleep(10);
             }
         }
         else if(opModeConstants.getGoldLocation() == OPModeConstants.GoldLocation.LEFT){
             moveLeftGold.init();
             moveLeftGold.performTask();
-            while (moveLeftGold.getTaskStatus() == false){
+            while (moveLeftGold.getTaskStatus() == false && !isStopRequested()){
                 sleep(10);
             }
         }
         else if(opModeConstants.getGoldLocation() == OPModeConstants.GoldLocation.RIGHT){
             moveRightGold.init();
             moveRightGold.performTask();
-            while (moveRightGold.getTaskStatus() == false){
+            while (moveRightGold.getTaskStatus() == false && !isStopRequested()){
                 sleep(10);
             }
         }
@@ -105,14 +105,14 @@ public class Abe_Autonomous_Left extends LinearOpMode{
         sleep(opModeConstants.restTimeMilli);
         driveHelper.drive(52.5, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
         sleep(opModeConstants.restTimeMilli);
-        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 90.0);
+        driveHelper.driveTurn(OPModeConstants.TurnDirection.RIGHT, OPModeConstants.AutonomousSpeed.LOW, 90.0);
         sleep(opModeConstants.restTimeMilli);
-        driveHelper.drive(60.5, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
+        driveHelper.drive(47.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
 
         // Drop flag
         dropFlag.init();
         dropFlag.performTask();
-        while (dropFlag.getTaskStatus() == false){
+        while (dropFlag.getTaskStatus() == false && !isStopRequested()){
             sleep(10);
         }
 
