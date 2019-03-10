@@ -100,17 +100,17 @@ public class Abe_Autonomous_Left_NoDepot extends LinearOpMode{
         sleep(opModeConstants.restTimeMilli);
 
         // Drive to crater
-        driveHelper.driveTurn(OPModeConstants.TurnDirection.RIGHT, OPModeConstants.AutonomousSpeed.LOW, 45.0);
+        driveHelper.driveTurn(OPModeConstants.TurnDirection.RIGHT, OPModeConstants.AutonomousSpeed.LOW, 40.0);
 
         sleep(opModeConstants.restTimeMilli);
 
-        driveHelper.drive(52.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
+        driveHelper.drive(47.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
 
         sleep(opModeConstants.restTimeMilli);
 
-        driveHelper.driveTurn(OPModeConstants.TurnDirection.RIGHT, OPModeConstants.AutonomousSpeed.LOW, 90.0);
+        driveHelper.driveTurn(OPModeConstants.TurnDirection.RIGHT, OPModeConstants.AutonomousSpeed.LOW, 75.0);
 
-        driveHelper.drive(4.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.REVERSE);
+        driveHelper.drive(6.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.REVERSE);
 
         requestOpModeStop();
     }

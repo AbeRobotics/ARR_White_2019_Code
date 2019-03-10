@@ -59,7 +59,7 @@ public class Abe_Autonomous_Right_NoMineral extends LinearOpMode{
 
         sleep(opModeConstants.restTimeMilli);
 
-        driveHelper.drive(4.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.REVERSE);
+        driveHelper.drive(6.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.REVERSE);
 
         sleep(opModeConstants.restTimeMilli);
 
@@ -69,13 +69,10 @@ public class Abe_Autonomous_Right_NoMineral extends LinearOpMode{
         sleep(opModeConstants.restTimeMilli);
 
         // Drive to depot
-        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 45.0);
         sleep(opModeConstants.restTimeMilli);
-        driveHelper.drive(52.5, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
+        driveHelper.drive(60.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
         sleep(opModeConstants.restTimeMilli);
-        driveHelper.driveTurn(OPModeConstants.TurnDirection.RIGHT, OPModeConstants.AutonomousSpeed.LOW, 90.0);
-        sleep(opModeConstants.restTimeMilli);
-        driveHelper.drive(47.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
+        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 45);
 
         // Drop flag
         dropFlag.init();
@@ -84,8 +81,9 @@ public class Abe_Autonomous_Right_NoMineral extends LinearOpMode{
             sleep(10);
         }
 
-        // Drive to crater
-        driveHelper.drive(76.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.REVERSE);
+        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 90);
+
+        driveHelper.drive(76.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
 
         requestOpModeStop();
     }
