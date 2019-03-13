@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -15,6 +16,7 @@ public class Task_MoveRightGold extends IOPModeTaskBase {
     private Helper_OPModeDriverV3 driveHelper;
     private ElapsedTime elapsedTime;
     private OPModeConstants opModeConstants;
+    private DcMotor collector;
 
     public Task_MoveRightGold(LinearOpMode opMode, HardwareMap hardwareMap, ElapsedTime elapsedTime, OPModeConstants opModeConstants, Helper_OPModeDriverV3 driveHelper){
         this.opMode = opMode;
@@ -27,6 +29,7 @@ public class Task_MoveRightGold extends IOPModeTaskBase {
     @Override
     public void init() {
         taskComplete = false;
+        collector = hardwareMap.dcMotor.get("collector");
     }
 
     @Override
@@ -35,11 +38,15 @@ public class Task_MoveRightGold extends IOPModeTaskBase {
 
         sleep(opModeConstants.restTimeMilli);
 
+        collector.setPower(-0.75);
+
         driveHelper.drive(38.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
 
         sleep(opModeConstants.restTimeMilli);
 
-        driveHelper.drive(38.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.REVERSE);
+        driveHelper.drive(333.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.REVERSE);
+
+        collector.setPower(0);
 
         sleep(opModeConstants.restTimeMilli);
 

@@ -111,7 +111,7 @@ public class Helper_OPModeDriverV3 {
 
 	private boolean onPosition(double target, DcMotor motor){
     	boolean on = false;
-    	if(Math.abs(motor.getCurrentPosition() - target) < opModeConstants.driveErrorThreshold){
+    	if(Math.abs(Math.abs(motor.getCurrentPosition()) - Math.abs(target)) < opModeConstants.driveErrorThreshold){
     		on = true;
 		}
 		return on;

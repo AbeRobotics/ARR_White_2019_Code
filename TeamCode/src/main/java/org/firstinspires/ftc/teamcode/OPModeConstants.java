@@ -17,7 +17,7 @@ public class OPModeConstants {
 	public final double armBrakePosition = 0.85d;
 
 	//Time Limits
-	public final double armRaiseTimeMilli = 10000;
+	public final double armRaiseTimeMilli = 4000;
 	public final double findGoldTimeMilli = 5000;
 	public final double dropFlagTimeMilli = 2000;
 	public final double armBrakeTimeMilli = 1000;

@@ -101,7 +101,7 @@ public class Abe_Autonomous_Right_Full extends LinearOpMode{
         sleep(opModeConstants.restTimeMilli);
 
         // Drive to depot
-        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 45.0);
+        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 40.0);
         sleep(opModeConstants.restTimeMilli);
         driveHelper.drive(52.5, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
         sleep(opModeConstants.restTimeMilli);

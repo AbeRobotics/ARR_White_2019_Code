@@ -72,13 +72,15 @@ public class Abe_Autonomous_Left_NoLowering extends LinearOpMode{
         sleep(opModeConstants.restTimeMilli);
 
         // Drive to depot
-        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 45.0);
+        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 40.0);
         sleep(opModeConstants.restTimeMilli);
-        driveHelper.drive(52.5, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
+        driveHelper.drive(40.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
         sleep(opModeConstants.restTimeMilli);
-        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 90.0);
+        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 75.0);
         sleep(opModeConstants.restTimeMilli);
         driveHelper.drive(60.5, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
+        sleep(opModeConstants.restTimeMilli);
+        driveHelper.driveTurn(OPModeConstants.TurnDirection.LEFT, OPModeConstants.AutonomousSpeed.LOW, 180-+.0);
 
         // Drop flag
         dropFlag.init();
@@ -88,7 +90,7 @@ public class Abe_Autonomous_Left_NoLowering extends LinearOpMode{
         }
 
         // Drive to crater
-        driveHelper.drive(76.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.REVERSE);
+        driveHelper.drive(75.0, OPModeConstants.AutonomousSpeed.MEDIUM, OPModeConstants.DriveDirection.FORWARD);
 
         requestOpModeStop();
     }
