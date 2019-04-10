@@ -12,7 +12,6 @@ import java.util.Locale;
 
 @TeleOp(name = "IMUtest", group = "Sensor")
 //@Disabled
-//Please ignore I'm testing stuff.
 public class IMUtest extends LinearOpMode
 {
     private BNO055IMU imu;
