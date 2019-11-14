@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## Welcome!
 ---
 #### [Robot Documentation](https://docs.google.com/document/d/1lg0r7BV6KoH1BBrSP4txHi-aMzu0d_SmC-K4DQh5t9Q/edit?usp=sharing)
@@ -770,3 +771,7 @@ In this latest version of the FTC SDK (20150803_001) the following changes shoul
 
 T. Eng
 August 3, 2015
+=======
+# ARR_White_2019_Code
+Code Repository for the 2019-2020 FTC Season - Team White
+>>>>>>> 4ce5d9ee0e433e762812c2be6a23dac5180cbce4
