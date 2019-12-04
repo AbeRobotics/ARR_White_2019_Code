@@ -14,18 +14,17 @@ public class Abe_Teleop_Main extends LinearOpMode {
 	
 	// Constants
 	// Use speed multiplier to set top speed, 1 means no change
-	private double SPEED_MULTIPLIER = 0.75;
-	private  double ARM_MULTIPLIER = 0.3;
+	private double FORWARD_SPEED_MULTIPLIER = 0.75;
+	private double HORIZONTAL_SPEED_MULTIPLIER = 0.75;
     // Sets how quickly the power to the wheels changes as a percent of the difference goal speed and current speed (max 1)
 	private double ACCELERATION_MULTIPLIER = 0.5;
 
     // Declare OpMode members.
     private ElapsedTime elapsedTime = new ElapsedTime();
-    private DcMotor leftDrive = null;
-    private DcMotor rightDrive = null;
-    private DcMotor armDrive = null;
-    private DcMotor collectionDrive = null;
-    private Servo armBrake;
+    private DcMotor leftFront = null;
+    private DcMotor leftBack = null;
+    private DcMotor rightFront = null;
+    private DcMotor rightBack = null;
 
 
     @Override
@@ -36,42 +35,29 @@ public class Abe_Teleop_Main extends LinearOpMode {
         // Initialize the hardware variables. The strings used here as parameters
         // must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_wheel");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_wheel");
-        armDrive = hardwareMap.get(DcMotor.class, "arm");
-        collectionDrive = hardwareMap.get(DcMotor.class, "collector");
-        armBrake = hardwareMap.get(Servo.class, "arm_brake");
+        leftFront = hardwareMap.get(DcMotor.class, "left_front_wheel");
+        rightFront = hardwareMap.get(DcMotor.class, "right_front_wheel");
+        leftBack = hardwareMap.get(DcMotor.class, "left_back_wheel");
+        rightBack = hardwareMap.get(DcMotor.class, "right_back_wheel");
 
 
         // Reverse the motor that runs backwards when connected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
-        armDrive.setDirection(DcMotor.Direction.FORWARD);
-        collectionDrive.setDirection(DcMotor.Direction.FORWARD);
-        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        collectionDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        armDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        collectionDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBack.setDirection(DcMotor.Direction.FORWARD);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setDirection(DcMotor.Direction.REVERSE);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        armDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        collectionDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         elapsedTime.reset();
 
-        double armPower = 0;
         double leftPower = 0;
         double rightPower = 0;
-        double collectorPower = 0;
-
-
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -81,47 +67,42 @@ public class Abe_Teleop_Main extends LinearOpMode {
             double goalRightPower;
 
             // Tank Mode uses one stick to control each wheel.
-            goalLeftPower  = gamepad1.left_stick_y * SPEED_MULTIPLIER;
-            goalRightPower = gamepad1.right_stick_y * SPEED_MULTIPLIER;
+            goalLeftPower  = gamepad1.left_stick_y * FORWARD_SPEED_MULTIPLIER;
+            goalRightPower = gamepad1.right_stick_y * FORWARD_SPEED_MULTIPLIER;
 
-            armPower = (gamepad1.right_trigger - gamepad1.left_trigger) * ARM_MULTIPLIER;
+
+            // used with omni-wheels in order to make the robot move sideways to the right
+            if (gamepad1.left_stick_y == 0 && gamepad1.right_stick_y == 0 && gamepad1.right_trigger > 0) {
+                leftBack.setPower(-gamepad1.right_trigger * HORIZONTAL_SPEED_MULTIPLIER);
+                leftFront.setPower(gamepad1.right_trigger * HORIZONTAL_SPEED_MULTIPLIER);
+                rightFront.setPower(-gamepad1.right_trigger * HORIZONTAL_SPEED_MULTIPLIER);
+                rightBack.setPower(gamepad1.right_trigger * HORIZONTAL_SPEED_MULTIPLIER);
+            }
+
+            // used with omni-wheels in order to make the robot move sideways to the left
+            if (gamepad1.left_stick_y == 0 && gamepad1.right_stick_y == 0 && gamepad1.left_trigger > 0) {
+                leftBack.setPower(gamepad1.right_trigger * HORIZONTAL_SPEED_MULTIPLIER);
+                leftFront.setPower(-gamepad1.right_trigger * HORIZONTAL_SPEED_MULTIPLIER);
+                rightFront.setPower(gamepad1.right_trigger * HORIZONTAL_SPEED_MULTIPLIER);
+                rightBack.setPower(-gamepad1.right_trigger * HORIZONTAL_SPEED_MULTIPLIER);
+            }
             
             //Set the wheel power to the difference between the desired and actual power times the acceleration multiplier.
             leftPower = leftPower + ((goalLeftPower - leftPower) * ACCELERATION_MULTIPLIER);
             rightPower = rightPower + ((goalRightPower - rightPower) * ACCELERATION_MULTIPLIER);
 
-            if(gamepad1.dpad_up){
-                armBrake.setPosition(0.85);
-            }
-
-            if(gamepad1.dpad_down){
-                armBrake.setPosition(1);
-            }
-
-            if(gamepad1.b){
-                collectorPower = 0;
-            }
-
-            if(gamepad1.a){
-                collectorPower = 0.75;
-            }
-
-            if(gamepad1.y){
-                collectorPower = -0.75;
-            }
-
             // Send calculated power to motors
-            leftDrive.setPower(leftPower);
-            rightDrive.setPower(rightPower);
-            armDrive.setPower(armPower);
-            collectionDrive.setPower(collectorPower);
+            leftBack.setPower(leftPower);
+            leftFront.setPower(leftPower);
+            rightBack.setPower(rightPower);
+            rightFront.setPower(rightPower);
 
             // Show the elapsed game time, goal wheel power, and wheel power.
             telemetry.addData("Status", "Run Time: " + elapsedTime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f), goal left (%.2f), goal right (%.2f)",
             		leftPower, rightPower, goalLeftPower, goalRightPower);
-            telemetry.addData("Right encoder", rightDrive.getCurrentPosition());
-            telemetry.addData("Left encoder", leftDrive.getCurrentPosition());
+            telemetry.addData("Right encoder", rightBack.getCurrentPosition());
+            telemetry.addData("Left encoder", leftBack.getCurrentPosition());
             telemetry.update();
         }
     }
