@@ -36,7 +36,7 @@ public class AutonomousTest extends LinearOpMode {
     	sleep(2000);
     	
     	opModeConstants.setTurnDirection(OPModeConstants.TurnDirection.LEFT);
-    	opModeConstants.setAutoSpeed(OPModeConstants.AutonomousSpeed.HIGH);;
+    	opModeConstants.setAutoSpeed(OPModeConstants.AutonomousSpeed.HIGH);
     	driver.driveTurn(opModeConstants.getTurnDirection(), opModeConstants.getAutoSpeed(), 360.0);
     	sleep(2000);
     	
