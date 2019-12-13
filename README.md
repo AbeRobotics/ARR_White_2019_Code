@@ -1,4 +1,5 @@
-<<<<<<< HEAD
+http://ftctechnh.github.io/ftc_app/doc/javadoc/index.html
+
 ## Welcome!
 ---
 #### [Robot Documentation](https://docs.google.com/document/d/1lg0r7BV6KoH1BBrSP4txHi-aMzu0d_SmC-K4DQh5t9Q/edit?usp=sharing)
