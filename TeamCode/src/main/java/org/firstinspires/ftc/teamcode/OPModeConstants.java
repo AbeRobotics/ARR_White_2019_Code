@@ -8,7 +8,7 @@ public class OPModeConstants {
 	
 	// Constant Values
 	public final double ticksPerInch = 91.6732d;
-	public final double gyroErrorThreshold = 3.0d;
+	public final double horizontalTicksPerInch = 91.6732d; // same for now but need to calculate it
 	public final double degreesToInch = 0.13308135546d * 1.075;
 	public final double driveErrorThreshold = 3d;
 	public final double slowdownMultiplier = 0.03d;
@@ -21,7 +21,6 @@ public class OPModeConstants {
 	public final double findGoldTimeMilli = 5000;
 	public final double dropFlagTimeMilli = 2000;
 	public final double armBrakeTimeMilli = 1000;
-	public final double moveGoldTimeMilli = 10000;
 	public final long restTimeMilli = 250;
 	
 	// Enumerations
@@ -43,12 +42,11 @@ public class OPModeConstants {
 		LEFT
 	}
 
-	public enum GoldLocation{
-		LEFT,
-		CENTER,
+	public enum HorizontalDriveDirection {
 		RIGHT,
-		UNKNOWN
+		LEFT
 	}
+
 	
 	// Instance variables
 	
@@ -56,7 +54,7 @@ public class OPModeConstants {
 	private AutonomousSpeed autoSpeed;
 	private DriveDirection driveDirection;
 	private TurnDirection turnDirection;
-	private GoldLocation goldLocation;
+	private HorizontalDriveDirection horizontalDriveDirection;
 	
 	// Constructor
 	
@@ -64,7 +62,6 @@ public class OPModeConstants {
 		setAutoSpeed(AutonomousSpeed.LOW);
 		setDriveDirection(DriveDirection.FORWARD);
 		setTurnDirection(TurnDirection.RIGHT);
-		setGoldLocation(GoldLocation.UNKNOWN);
 	}
 	
 	public static OPModeConstants getInstance() {
@@ -103,10 +100,8 @@ public class OPModeConstants {
 		return turnDirection;
 	}
 
-	// Gold Location
-	public void setGoldLocation(GoldLocation location){ goldLocation = location; }
+	// Horizontal direction
+	public void setHorizontalDriveDirection(HorizontalDriveDirection direction) { horizontalDriveDirection = direction; }
 
-	public GoldLocation getGoldLocation(){
-		return goldLocation;
-	}
+	public HorizontalDriveDirection getHorizontalDriveDirection() { return horizontalDriveDirection; }
 }

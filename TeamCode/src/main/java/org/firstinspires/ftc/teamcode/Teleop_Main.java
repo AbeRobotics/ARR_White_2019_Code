@@ -9,41 +9,21 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-/**
- * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
- * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
- * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
- *
- * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
- * It includes all the skeletal structure that all linear OpModes contain.
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
-
 @TeleOp(name="Test Op Mode", group="Linear Opmode")
 //@Disabled
-public class TestOpMode extends LinearOpMode {
+public class Teleop_Main extends LinearOpMode {
 
-    // Declare OpMode members.
-    // Constants
     // Use speed multiplier to set top speed, 1 means no change
     private double FORWARD_SPEED_MULTIPLIER = 1;
     private double HORIZONTAL_SPEED_MULTIPLIER = 1;
     // Sets how quickly the power to the wheels changes as a percent of the difference goal speed and current speed (max 1)
     private double ACCELERATION_MULTIPLIER = 1;
 
-    private ElapsedTime runtime = new ElapsedTime();
     private ElapsedTime elapsedTime = new ElapsedTime();
     private DcMotor leftFront = null;
     private DcMotor leftBack = null;
     private DcMotor rightFront = null;
     private DcMotor rightBack = null;
-    private DcMotor arm = null;
-
-    private Servo leftClaw = null;
-    private Servo rightClaw = null;
 
     @Override
     public void runOpMode() {
@@ -57,15 +37,6 @@ public class TestOpMode extends LinearOpMode {
         rightFront = hardwareMap.get(DcMotor.class, "right_front_wheel");
         leftBack = hardwareMap.get(DcMotor.class, "left_back_wheel");
         rightBack = hardwareMap.get(DcMotor.class, "right_back_wheel");
-
-        arm = hardwareMap.get(DcMotor.class, "arm");
-
-        leftClaw = hardwareMap.get(Servo.class, "left_claw");
-        rightClaw = hardwareMap.get(Servo.class, "right_claw");
-
-        rightFront.setDirection(DcMotor.Direction.REVERSE);
-        rightBack.setDirection(DcMotor.Direction.REVERSE);
-        rightClaw.setDirection(Servo.Direction.REVERSE);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -84,24 +55,6 @@ public class TestOpMode extends LinearOpMode {
             double goalLeftFrontPower;
             double goalRightFrontPower;
             double goalRightBackPower;
-
-            if (gamepad1.a) {
-                leftClaw.setPosition(0);
-                rightClaw.setPosition(0);
-            }
-
-            if (gamepad1.b) {
-                leftClaw.setPosition(1);
-                rightClaw.setPosition(1);
-            }
-
-            if (gamepad1.dpad_up) {
-                arm.setPower(0.5);
-            } else if (gamepad1.dpad_down) {
-                arm.setPower(-0.2);
-            } else {
-                arm.setPower(0);
-            }
 
             if (gamepad1.right_trigger > 0 || gamepad1.left_trigger > 0) {
                 if (gamepad1.right_trigger > 0) {
@@ -126,10 +79,11 @@ public class TestOpMode extends LinearOpMode {
             }
 
             //Set the wheel power to the difference between the desired and actual power times the acceleration multiplier.
-            leftBackPower = leftBackPower + ((goalLeftBackPower - leftBackPower) * ACCELERATION_MULTIPLIER);
-            leftFrontPower = leftFrontPower + ((goalLeftFrontPower - leftFrontPower) * ACCELERATION_MULTIPLIER);
-            rightBackPower = rightBackPower + ((goalRightBackPower - rightBackPower) * ACCELERATION_MULTIPLIER);
-            rightFrontPower = rightFrontPower + ((goalRightFrontPower - rightFrontPower) * ACCELERATION_MULTIPLIER);
+            // TODO just use the goal power, don't add just equals
+            leftBackPower = goalLeftBackPower * ACCELERATION_MULTIPLIER;
+            leftFrontPower = goalLeftFrontPower * ACCELERATION_MULTIPLIER;
+            rightBackPower = goalRightBackPower * ACCELERATION_MULTIPLIER;
+            rightFrontPower = goalRightFrontPower * ACCELERATION_MULTIPLIER;
 
             // Send calculated power to motors
             leftBack.setPower(leftBackPower);

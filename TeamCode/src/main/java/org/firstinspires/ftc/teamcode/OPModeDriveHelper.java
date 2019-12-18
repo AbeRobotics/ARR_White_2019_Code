@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -10,14 +11,15 @@ public class OPModeDriveHelper {
 	private static OPModeDriveHelper instance;
     private  OPModeConstants opModeConstants;
     private  Telemetry telemetry;
-    private  HardwareMap hardwareMap;
     private LinearOpMode opMode;
-    private DcMotor leftWheel;
-    private DcMotor rightWheel;
+    private DcMotor leftFront;
+    private DcMotor rightFront;
+    private DcMotor leftBack;
+    private DcMotor rightBack;
     
     // Returns instance or creates a new one if null
     public static OPModeDriveHelper getInstance() {
-        if(instance==null) {
+        if (instance == null) {
             instance = new OPModeDriveHelper();
         }
         return instance;
@@ -25,67 +27,107 @@ public class OPModeDriveHelper {
     
     public void init(Telemetry telemetry, HardwareMap hardwareMap, OPModeConstants opModeConstants, LinearOpMode opMode) {
     	this.telemetry = telemetry;
-    	this.hardwareMap = hardwareMap;
         this.opModeConstants = opModeConstants;
         this.opMode = opMode;
 
-        leftWheel = hardwareMap.dcMotor.get("left_wheel");
-        rightWheel = hardwareMap.dcMotor.get("right_wheel");
+		leftFront = hardwareMap.get(DcMotor.class, "left_front_wheel");
+		rightFront = hardwareMap.get(DcMotor.class, "right_front_wheel");
+		leftBack = hardwareMap.get(DcMotor.class, "left_back_wheel");
+		rightBack = hardwareMap.get(DcMotor.class, "right_back_wheel");
     }
     
-    private OPModeDriveHelper(){}
+    private OPModeDriveHelper() {}
     
     // Drives with previously used settings
     public boolean drive(Double inches) {
     	return drive(inches, opModeConstants.getAutoSpeed(), opModeConstants.getDriveDirection());
     }
-    
+
+    // Drives horizontally
+	public boolean driveHorizontal(Double inches, OPModeConstants.AutonomousSpeed speed, OPModeConstants.HorizontalDriveDirection direction) {
+    	setAllStop();
+    	resetDriveEncoders();
+		double totalTicks = opModeConstants.horizontalTicksPerInch * inches;
+
+		setHorizontalDriveDirection(direction);
+		leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		leftFront.setPower(getPower(speed));
+		rightFront.setPower(getPower(speed));
+		leftFront.setTargetPosition((int) totalTicks);
+		rightFront.setTargetPosition((int) totalTicks);
+
+		while ((leftFront.isBusy() || rightFront.isBusy()) && !opMode.isStopRequested()) {
+			leftBack.setPower(getPower(speed));
+			rightBack.setPower(getPower(speed));
+			telemetry.addData("Left Current Position -", leftFront.getCurrentPosition());
+			telemetry.addData("Right Current Position -", rightFront.getCurrentPosition());
+			telemetry.addData("Target positions: ", totalTicks);
+			telemetry.update();
+			sleep(10);
+		}
+
+		setAllStop();
+		resetDriveEncoders();
+    	return true;
+	}
+
     // Drives in a line
-    public boolean drive(Double inches, OPModeConstants.AutonomousSpeed speed, OPModeConstants.DriveDirection direction) {
+    public boolean drive(Double inches, OPModeConstants.AutonomousSpeed speed, OPModeConstants.DriveDirection direction ) {
     	setAllStop();
     	resetDriveEncoders();
     	double totalTicks = opModeConstants.ticksPerInch * inches;
-    	
+
     	setDriveDirection(direction);
-    	leftWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-		leftWheel.setPower(getPower(speed));
-		rightWheel.setPower(getPower(speed));
-        leftWheel.setTargetPosition((int)totalTicks);
-        rightWheel.setTargetPosition((int)totalTicks);
+		leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		leftFront.setPower(getPower(speed));
+		rightFront.setPower(getPower(speed));
+		leftFront.setTargetPosition((int) totalTicks);
+		rightFront.setTargetPosition((int) totalTicks);
         
-        while((leftWheel.isBusy() || rightWheel.isBusy()) && opMode.isStopRequested() == false) {
-            telemetry.addData("Left Current Position -",leftWheel.getCurrentPosition());
-            telemetry.addData("Right Current Position -",rightWheel.getCurrentPosition());
+        while ((leftFront.isBusy() || rightFront.isBusy()) && !opMode.isStopRequested()) {
+        	leftBack.setPower(getPower(speed));
+        	rightBack.setPower(getPower(speed));
+            telemetry.addData("Left Current Position -", leftFront.getCurrentPosition());
+            telemetry.addData("Right Current Position -", rightFront.getCurrentPosition());
 			telemetry.addData("Target positions: ", totalTicks);
             telemetry.update();
             sleep(10);
         }
+
         setAllStop();
         resetDriveEncoders();
         return true;
     }
+
 	// Turns the robot using encoders
     public boolean driveTurn(OPModeConstants.TurnDirection direction, OPModeConstants.AutonomousSpeed speed, double angle){
     	setAllStop();
     	resetDriveEncoders();
 
     	setTurnDirection(direction);
-		while(angle > 360) {angle -= 360;}
-		while(angle < 0) {angle += 360;}
+		while (angle > 360) {
+			angle -= 360;
+		}
+		while (angle < 0) {
+			angle += 360;
+		}
 
 		double totalTicks = angle * opModeConstants.degreesToInch * opModeConstants.ticksPerInch;
 
-		leftWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-		rightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-		leftWheel.setPower(getPower(speed));
-		rightWheel.setPower(getPower(speed));
-		leftWheel.setTargetPosition((int)totalTicks);
-		rightWheel.setTargetPosition((int)totalTicks);
+		leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		leftFront.setPower(getPower(speed));
+		rightFront.setPower(getPower(speed));
+		leftFront.setTargetPosition((int) totalTicks);
+		rightFront.setTargetPosition((int) totalTicks);
 
-		while((leftWheel.isBusy() || rightWheel.isBusy()) && opMode.isStopRequested() == false) {
-			telemetry.addData("Left Current Position -",leftWheel.getCurrentPosition());
-			telemetry.addData("Right Current Position -",rightWheel.getCurrentPosition());
+		while((leftFront.isBusy() || rightFront.isBusy()) && !opMode.isStopRequested()) {
+			leftBack.setPower(getPower(speed));
+			rightBack.setPower(getPower(speed));
+			telemetry.addData("Left Current Position -",leftFront.getCurrentPosition());
+			telemetry.addData("Right Current Position -",rightFront.getCurrentPosition());
 			telemetry.addData("Target positions: ", totalTicks);
 			telemetry.update();
 			sleep(10);
@@ -94,40 +136,6 @@ public class OPModeDriveHelper {
 		resetDriveEncoders();
 		return true;
 	}
-
-    // Turns the robot *THE GYROSCOPE DOESN'T WORK, DO NOT USE*
-    public boolean gyroTurn(OPModeConstants.TurnDirection direction, OPModeConstants.AutonomousSpeed speed, double angle) {
-    	setAllStop();
-    	resetDriveEncoders();
-    	
-    	setTurnDirection(direction);
-    	while(angle > 360) {angle -= 360;}
-    	while(angle < 0) {angle += 360;}
-    	
-    	leftWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    	rightWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    	
-    	OPModeGyroHelper gyroHelper = new OPModeGyroHelper();
-    	while(!onHeading(angle, gyroHelper) && opMode.isStopRequested() == false) {
-    		leftWheel.setPower(getPower(speed));
-            rightWheel.setPower(getPower(speed));
-    	}
-    	
-    	setAllStop();
-    	resetDriveEncoders();
-    	return true;
-    }
-    
-    // Checks if robot is facing an angle
-    private boolean onHeading(double targetAngle, OPModeGyroHelper gyroHelper) {
-    	boolean onTarget = false;
-    	
-    	double DegreesOffTarget = Math.abs(targetAngle - gyroHelper.getGyroAngle(telemetry, hardwareMap));
-    	if(DegreesOffTarget < opModeConstants.gyroErrorThreshold) {
-    		onTarget = true;
-    	}
-    	return onTarget;
-    }
 
     // Returns power for wheels
 	private double getPower(OPModeConstants.AutonomousSpeed speed) {
@@ -146,41 +154,69 @@ public class OPModeDriveHelper {
 	// Sets wheels to drive forward or backward
 	private void setDriveDirection(OPModeConstants.DriveDirection direction) {
 		switch(direction) {
-		case FORWARD:
-			rightWheel.setDirection(DcMotor.Direction.FORWARD);
-			leftWheel.setDirection(DcMotor.Direction.REVERSE);
-			break;
-		case REVERSE:
-			rightWheel.setDirection(DcMotor.Direction.REVERSE);
-			leftWheel.setDirection(DcMotor.Direction.FORWARD);
-			break;
+			case FORWARD:
+				rightFront.setDirection(DcMotor.Direction.FORWARD);
+				rightBack.setDirection(DcMotor.Direction.FORWARD);
+				leftFront.setDirection(DcMotor.Direction.FORWARD);
+				leftBack.setDirection(DcMotor.Direction.FORWARD);
+				break;
+			case REVERSE:
+				rightFront.setDirection(DcMotor.Direction.REVERSE);
+				rightBack.setDirection(DcMotor.Direction.REVERSE);
+				leftFront.setDirection(DcMotor.Direction.REVERSE);
+				leftBack.setDirection(DcMotor.Direction.REVERSE);
+				break;
+		}
+	}
+
+	// Sets wheels to drive horizontally
+	private void setHorizontalDriveDirection(OPModeConstants.HorizontalDriveDirection direction) {
+    	switch (direction) {
+			case LEFT:
+				rightFront.setDirection(DcMotor.Direction.REVERSE);
+				rightBack.setDirection(DcMotor.Direction.FORWARD);
+				leftFront.setDirection(DcMotor.Direction.FORWARD);
+				leftBack.setDirection(DcMotor.Direction.REVERSE);
+				break;
+			case RIGHT:
+				rightFront.setDirection(DcMotor.Direction.FORWARD);
+				rightBack.setDirection(DcMotor.Direction.REVERSE);
+				leftFront.setDirection(DcMotor.Direction.REVERSE);
+				leftBack.setDirection(DcMotor.Direction.FORWARD);
+				break;
 		}
 	}
 	
 	// Sets wheels to turn right or left
 	private void setTurnDirection(OPModeConstants.TurnDirection direction) {
 		switch(direction) {
-		case RIGHT:
-			rightWheel.setDirection(DcMotor.Direction.REVERSE);
-			leftWheel.setDirection(DcMotor.Direction.REVERSE);
-			break;
-		case LEFT:
-			rightWheel.setDirection(DcMotor.Direction.FORWARD);
-			leftWheel.setDirection(DcMotor.Direction.FORWARD);
-			break;
+			case RIGHT:
+				rightFront.setDirection(DcMotor.Direction.FORWARD);
+				rightBack.setDirection(DcMotor.Direction.FORWARD);
+				leftFront.setDirection(DcMotor.Direction.REVERSE);
+				leftBack.setDirection(DcMotor.Direction.REVERSE);
+				break;
+			case LEFT:
+				rightFront.setDirection(DcMotor.Direction.REVERSE);
+				rightBack.setDirection(DcMotor.Direction.REVERSE);
+				leftFront.setDirection(DcMotor.Direction.FORWARD);
+				leftBack.setDirection(DcMotor.Direction.FORWARD);
+				break;
 		}
 	}
 
 	// Resets the drive encoders
 	private void resetDriveEncoders() {
-		leftWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-		rightWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+		leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+		rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 	}
 	
 	// Stops the robot
     public void setAllStop() {
-        leftWheel.setPower(0);
-        rightWheel.setPower(0);
+		leftFront.setPower(0);
+		leftBack.setPower(0);
+		rightFront.setPower(0);
+		rightBack.setPower(0);
     }
     
     public final void sleep(long milliseconds) {
