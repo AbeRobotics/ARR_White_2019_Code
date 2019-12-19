@@ -46,7 +46,6 @@ public class OPModeConstants {
 		RIGHT,
 		LEFT
 	}
-
 	
 	// Instance variables
 	
