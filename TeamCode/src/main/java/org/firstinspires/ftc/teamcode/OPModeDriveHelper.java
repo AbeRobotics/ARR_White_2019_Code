@@ -38,12 +38,12 @@ public class OPModeDriveHelper {
     private OPModeDriveHelper() {}
     
     // Drives with previously used settings
-    public boolean drive(Double inches) {
+	boolean drive(Double inches) {
     	return drive(inches, opModeConstants.getAutoSpeed(), opModeConstants.getDriveDirection());
     }
 
     // Drives horizontally
-	public boolean driveHorizontal(Double inches, OPModeConstants.AutonomousSpeed speed, OPModeConstants.HorizontalDriveDirection direction) {
+	boolean driveHorizontal(Double inches, OPModeConstants.AutonomousSpeed speed, OPModeConstants.HorizontalDriveDirection direction) {
     	setAllStop();
     	resetDriveEncoders();
 		double totalTicks = opModeConstants.horizontalTicksPerInch * inches;
@@ -72,7 +72,7 @@ public class OPModeDriveHelper {
 	}
 
     // Drives in a line
-    public boolean drive(Double inches, OPModeConstants.AutonomousSpeed speed, OPModeConstants.DriveDirection direction ) {
+	boolean drive(Double inches, OPModeConstants.AutonomousSpeed speed, OPModeConstants.DriveDirection direction ) {
     	setAllStop();
     	resetDriveEncoders();
     	double totalTicks = opModeConstants.ticksPerInch * inches;
@@ -101,7 +101,7 @@ public class OPModeDriveHelper {
     }
 
 	// Turns the robot using encoders
-    public boolean driveTurn(OPModeConstants.TurnDirection direction, OPModeConstants.AutonomousSpeed speed, double angle){
+	boolean driveTurn(OPModeConstants.TurnDirection direction, OPModeConstants.AutonomousSpeed speed, double angle){
     	setAllStop();
     	resetDriveEncoders();
 
@@ -211,7 +211,7 @@ public class OPModeDriveHelper {
 	}
 	
 	// Stops the robot
-    public void setAllStop() {
+    private void setAllStop() {
 		leftFront.setPower(0);
 		leftBack.setPower(0);
 		rightFront.setPower(0);

@@ -2,16 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="Test Op Mode", group="Linear Opmode")
-//@Disabled
-public class Teleop_Main extends LinearOpMode {
+@TeleOp(name="Beta Op Mode", group="Linear Opmode")
+public class Beta_Teleop_Main extends LinearOpMode {
 
     // Use speed multiplier to set top speed, 1 means no change
     private double FORWARD_SPEED_MULTIPLIER = 1;
@@ -42,33 +37,33 @@ public class Teleop_Main extends LinearOpMode {
         waitForStart();
         elapsedTime.reset();
 
-        double leftBackPower = 0;
-        double leftFrontPower = 0;
-        double rightBackPower = 0;
-        double rightFrontPower = 0;
+        double leftBackPower;
+        double leftFrontPower;
+        double rightBackPower;
+        double rightFrontPower;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
             // Setup a variable for each drive wheel to save power level for telemetry
-            double goalLeftBackPower;
-            double goalLeftFrontPower;
-            double goalRightFrontPower;
-            double goalRightBackPower;
+            double goalLeftBackPower = 0;
+            double goalLeftFrontPower = 0;
+            double goalRightFrontPower = 0;
+            double goalRightBackPower = 0;
 
-            if (gamepad1.right_trigger > 0 || gamepad1.left_trigger > 0) {
-                if (gamepad1.right_trigger > 0) {
+            if (gamepad1.left_stick_x != 0 && gamepad1.right_stick_x != 0) {
+                if (gamepad1.right_stick_x > 0 && gamepad1.left_stick_x > 0) {
                     // used with omni-wheels in order to make the robot move sideways to the right
-                    goalLeftBackPower = gamepad1.right_trigger * -HORIZONTAL_SPEED_MULTIPLIER;
-                    goalLeftFrontPower = gamepad1.right_trigger * HORIZONTAL_SPEED_MULTIPLIER;
-                    goalRightFrontPower = gamepad1.right_trigger * -HORIZONTAL_SPEED_MULTIPLIER;
-                    goalRightBackPower = gamepad1.right_trigger * HORIZONTAL_SPEED_MULTIPLIER;
-                } else {
+                    goalLeftBackPower = ((gamepad1.right_stick_x + gamepad1.left_stick_x) / 2) * -HORIZONTAL_SPEED_MULTIPLIER;
+                    goalLeftFrontPower = ((gamepad1.right_stick_x + gamepad1.left_stick_x) / 2) * HORIZONTAL_SPEED_MULTIPLIER;
+                    goalRightFrontPower = ((gamepad1.right_stick_x + gamepad1.left_stick_x) / 2) * -HORIZONTAL_SPEED_MULTIPLIER;
+                    goalRightBackPower = ((gamepad1.right_stick_x + gamepad1.left_stick_x) / 2) * HORIZONTAL_SPEED_MULTIPLIER;
+                } else if (gamepad1.right_stick_x < 0 && gamepad1.left_stick_x < 0) {
                     // used with omni-wheels in order to make the robot move sideways to the left
-                    goalLeftBackPower = gamepad1.left_trigger * HORIZONTAL_SPEED_MULTIPLIER;
-                    goalLeftFrontPower = gamepad1.left_trigger * -HORIZONTAL_SPEED_MULTIPLIER;
-                    goalRightFrontPower = gamepad1.left_trigger * HORIZONTAL_SPEED_MULTIPLIER;
-                    goalRightBackPower = gamepad1.left_trigger * -HORIZONTAL_SPEED_MULTIPLIER;
+                    goalLeftBackPower = ((gamepad1.right_stick_x + gamepad1.left_stick_x) / 2) * -HORIZONTAL_SPEED_MULTIPLIER;
+                    goalLeftFrontPower = ((gamepad1.right_stick_x + gamepad1.left_stick_x) / 2) * HORIZONTAL_SPEED_MULTIPLIER;
+                    goalRightFrontPower = ((gamepad1.right_stick_x + gamepad1.left_stick_x) / 2) * -HORIZONTAL_SPEED_MULTIPLIER;
+                    goalRightBackPower = ((gamepad1.right_stick_x + gamepad1.left_stick_x) / 2) * HORIZONTAL_SPEED_MULTIPLIER;
                 }
             } else {
                 // tank mode uses one joystick per side
@@ -79,7 +74,6 @@ public class Teleop_Main extends LinearOpMode {
             }
 
             //Set the wheel power to the difference between the desired and actual power times the acceleration multiplier.
-            // TODO just use the goal power, don't add just equals
             leftBackPower = goalLeftBackPower * ACCELERATION_MULTIPLIER;
             leftFrontPower = goalLeftFrontPower * ACCELERATION_MULTIPLIER;
             rightBackPower = goalRightBackPower * ACCELERATION_MULTIPLIER;
@@ -104,3 +98,4 @@ public class Teleop_Main extends LinearOpMode {
         }
     }
 }
+

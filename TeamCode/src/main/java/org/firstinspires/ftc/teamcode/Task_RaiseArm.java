@@ -19,7 +19,7 @@ public class Task_RaiseArm extends IOPModeTaskBase {
     private LinearOpMode opMode;
     private ElapsedTime elapsedTime;
 
-    public Task_RaiseArm(LinearOpMode opMode, HardwareMap hardwareMap, ElapsedTime elapsedTime, OPModeConstants opModeConstants){
+    Task_RaiseArm(LinearOpMode opMode, HardwareMap hardwareMap, ElapsedTime elapsedTime, OPModeConstants opModeConstants){
         this.armMotor = hardwareMap.get(DcMotor.class, "arm");
         this.armButton = hardwareMap.get(TouchSensor.class, "button");
         this.opMode = opMode;
@@ -34,7 +34,7 @@ public class Task_RaiseArm extends IOPModeTaskBase {
     }
 
     @Override
-    public void performTask(){
+    public void performTask() {
         double startTime = elapsedTime.milliseconds();
 
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
