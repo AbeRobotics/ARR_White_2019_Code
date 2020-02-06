@@ -3,14 +3,18 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Beta Op Mode", group="Linear Opmode")
 public class Beta_Teleop_Main extends LinearOpMode {
 
-    // Use speed multiplier to set top speed, 1 means no change
+    // Use speed multiplier to set top speed of motors, 1 means no change
     private double FORWARD_SPEED_MULTIPLIER = 1;
     private double HORIZONTAL_SPEED_MULTIPLIER = 1;
+    private double ARM_LIFT_SPEED_MULITPLIER = 1;
+    private double WRIST_LIFT_SPEED_MULTIPLIER = 1;
     // Sets how quickly the power to the wheels changes as a percent of the difference goal speed and current speed (max 1)
     private double ACCELERATION_MULTIPLIER = 1;
 
@@ -19,6 +23,11 @@ public class Beta_Teleop_Main extends LinearOpMode {
     private DcMotor leftBack = null;
     private DcMotor rightFront = null;
     private DcMotor rightBack = null;
+    private DcMotor armLift = null;
+    private DcMotor wristLift = null;
+    private Servo claw = null;
+    private Servo rightPlatformGrabber = null;
+    private Servo leftPlatformGrabber = null;
 
     @Override
     public void runOpMode() {
@@ -32,6 +41,15 @@ public class Beta_Teleop_Main extends LinearOpMode {
         rightFront = hardwareMap.get(DcMotor.class, "right_front_wheel");
         leftBack = hardwareMap.get(DcMotor.class, "left_back_wheel");
         rightBack = hardwareMap.get(DcMotor.class, "right_back_wheel");
+        armLift = hardwareMap.get(DcMotor.class, "arm_lift");
+        wristLift = hardwareMap.get(DcMotor.class, "wrist_lift");
+        claw = hardwareMap.get(Servo.class, "claw");
+        rightPlatformGrabber = hardwareMap.get(Servo.class, "right_grabber");
+        leftPlatformGrabber = hardwareMap.get(Servo.class, "left_grabber");
+
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftPlatformGrabber.setDirection(Servo.Direction.REVERSE);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -41,6 +59,8 @@ public class Beta_Teleop_Main extends LinearOpMode {
         double leftFrontPower;
         double rightBackPower;
         double rightFrontPower;
+        double armLiftPower;
+        double wristLiftPower;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -50,6 +70,8 @@ public class Beta_Teleop_Main extends LinearOpMode {
             double goalLeftFrontPower = 0;
             double goalRightFrontPower = 0;
             double goalRightBackPower = 0;
+
+
 
             if (gamepad1.left_stick_x != 0 && gamepad1.right_stick_x != 0) {
                 if (gamepad1.right_stick_x > 0 && gamepad1.left_stick_x > 0) {
@@ -73,6 +95,23 @@ public class Beta_Teleop_Main extends LinearOpMode {
                 goalRightBackPower = gamepad1.right_stick_y * FORWARD_SPEED_MULTIPLIER;
             }
 
+            if (gamepad1.a) {
+                rightPlatformGrabber.setPosition(1);
+                leftPlatformGrabber.setPosition(1);
+            } else if (gamepad1.b) {
+                rightPlatformGrabber.setPosition(0);
+                leftPlatformGrabber.setPosition(0);
+            }
+
+            if (gamepad2.x){
+
+            } else if (gamepad2.y) {
+
+            }
+
+            armLiftPower = gamepad2.right_stick_y * ARM_LIFT_SPEED_MULITPLIER;
+            wristLiftPower = gamepad2.left_stick_y * WRIST_LIFT_SPEED_MULTIPLIER;
+
             //Set the wheel power to the difference between the desired and actual power times the acceleration multiplier.
             leftBackPower = goalLeftBackPower * ACCELERATION_MULTIPLIER;
             leftFrontPower = goalLeftFrontPower * ACCELERATION_MULTIPLIER;
@@ -84,6 +123,8 @@ public class Beta_Teleop_Main extends LinearOpMode {
             leftFront.setPower(leftFrontPower);
             rightBack.setPower(rightBackPower);
             rightFront.setPower(rightFrontPower);
+            armLift.setPower(armLiftPower);
+            wristLift.setPower(wristLiftPower);
 
             // Show the elapsed game time, goal wheel power, and wheel power.
             telemetry.addData("Status", "Run Time: " + elapsedTime.toString());
