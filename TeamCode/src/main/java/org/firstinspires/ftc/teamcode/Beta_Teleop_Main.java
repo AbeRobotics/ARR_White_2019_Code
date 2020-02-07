@@ -13,7 +13,7 @@ public class Beta_Teleop_Main extends LinearOpMode {
     // Use speed multiplier to set top speed of motors, 1 means no change
     private double FORWARD_SPEED_MULTIPLIER = 1;
     private double HORIZONTAL_SPEED_MULTIPLIER = 1;
-    private double ARM_LIFT_SPEED_MULITPLIER = 1;
+    private double ARM_LIFT_SPEED_MULTIPLIER = 1;
     private double WRIST_LIFT_SPEED_MULTIPLIER = 1;
     // Sets how quickly the power to the wheels changes as a percent of the difference goal speed and current speed (max 1)
     private double ACCELERATION_MULTIPLIER = 1;
@@ -47,8 +47,8 @@ public class Beta_Teleop_Main extends LinearOpMode {
         rightPlatformGrabber = hardwareMap.get(Servo.class, "right_grabber");
         leftPlatformGrabber = hardwareMap.get(Servo.class, "left_grabber");
 
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
         leftPlatformGrabber.setDirection(Servo.Direction.REVERSE);
 
         // Wait for the game to start (driver presses PLAY)
@@ -104,12 +104,12 @@ public class Beta_Teleop_Main extends LinearOpMode {
             }
 
             if (gamepad2.x){
-
+                claw.setPosition(1);
             } else if (gamepad2.y) {
-
+                claw.setPosition(0);
             }
 
-            armLiftPower = gamepad2.right_stick_y * ARM_LIFT_SPEED_MULITPLIER;
+            armLiftPower = gamepad2.right_stick_y * ARM_LIFT_SPEED_MULTIPLIER;
             wristLiftPower = gamepad2.left_stick_y * WRIST_LIFT_SPEED_MULTIPLIER;
 
             //Set the wheel power to the difference between the desired and actual power times the acceleration multiplier.
@@ -130,9 +130,10 @@ public class Beta_Teleop_Main extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + elapsedTime.toString());
             telemetry.addData("Motors",
                     "left_back (%.2f), right_back (%.2f), left_front (%.2f), right_front (%.2f)," +
-                            " goal left_back (%.2f), goal right_back (%.2f), goal left_front (%.2f), goal right_front (%.2f)",
-                    leftBackPower, rightBackPower, leftFrontPower, rightFrontPower,
-                    goalLeftBackPower, goalRightBackPower, goalLeftFrontPower, goalRightFrontPower);
+                            " claw position (%.2f), right grabber position (%.2f), left grabber position (%.2f)," +
+                            " arm lift motor power (%.2f), wrist lift motor power (%.2f)",
+                    leftBackPower, rightBackPower, leftFrontPower, rightFrontPower, claw.getPosition(), rightPlatformGrabber.getPosition(),
+                    leftPlatformGrabber.getPosition(), armLiftPower, wristLiftPower);
             telemetry.addData("Right encoder", rightBack.getCurrentPosition());
             telemetry.addData("Left encoder", leftBack.getCurrentPosition());
             telemetry.update();
