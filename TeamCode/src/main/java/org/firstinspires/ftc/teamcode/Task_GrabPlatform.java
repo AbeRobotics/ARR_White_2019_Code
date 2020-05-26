@@ -5,56 +5,48 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-/**
- * Created by Kyle Stang on 1-Mar-2019
- */
-public class Task_ArmBrake extends IOPModeTaskBase {
+public class Task_GrabPlatform extends IOPModeTaskBase {
 
     private LinearOpMode opMode;
     private HardwareMap hardwareMap;
     private ElapsedTime elapsedTime;
     private OPModeConstants opModeConstants;
 
-    private boolean taskComplete;
-    private Servo armBrake;
+    private boolean taskComplete = false;
+    private Servo leftPlatformGrabber;
+    private Servo rightPlatformGrabber;
 
-    public Task_ArmBrake(LinearOpMode opMode, HardwareMap hardwareMap, ElapsedTime elapsedTime, OPModeConstants opModeConstants){
+    Task_GrabPlatform(LinearOpMode opMode, HardwareMap hardwareMap, ElapsedTime elapsedTime, OPModeConstants opModeConstants){
         this.opMode = opMode;
         this.hardwareMap = hardwareMap;
         this.elapsedTime = elapsedTime;
         this.opModeConstants = opModeConstants;
     }
 
-    @Override
     public void init() {
-        taskComplete = false;
-        armBrake = hardwareMap.servo.get("arm_brake");
+        rightPlatformGrabber = hardwareMap.get(Servo.class, "right_grabber");
+        leftPlatformGrabber = hardwareMap.get(Servo.class, "left_grabber");
     }
 
-    @Override
     public void performTask() {
         double startTime = elapsedTime.milliseconds();
-        while(taskComplete == false && !opMode.isStopRequested()){
-            if(elapsedTime.milliseconds() > startTime + opModeConstants.armBrakeTimeMilli){
+        while (!taskComplete && !opMode.isStopRequested()) {
+            if (elapsedTime.milliseconds() > startTime + opModeConstants.servoTimeLimit) {
                 opMode.telemetry.addData("status", "timeout");
                 opMode.telemetry.update();
                 taskComplete = true;
                 break;
             }
-            armBrake.setPosition(opModeConstants.armBrakePosition);
-            if(armBrake.getPosition() == opModeConstants.armBrakePosition){
+
+            leftPlatformGrabber.setPosition(0.7);
+            rightPlatformGrabber.setPosition(1);
+
+            if (leftPlatformGrabber.getPosition() == 1 && rightPlatformGrabber.getPosition() == 1) {
                 taskComplete = true;
             }
         }
     }
 
-    @Override
-    public boolean getTaskStatus() {
-        return taskComplete;
-    }
-
-    @Override
-    public void reset() {
-        taskComplete = false;
-    }
+    public boolean getTaskStatus() { return taskComplete; }
+    public void reset() { taskComplete = false; }
 }
